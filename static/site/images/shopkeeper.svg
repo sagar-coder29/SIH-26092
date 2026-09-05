@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#FCA5A5"/>
+    </radialGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+  </defs>
+  <circle cx="110" cy="105" r="100" fill="url(#bg)"/>
+  <circle cx="110" cy="105" r="100" fill="none" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="6 9"/>
+  <!-- sun rays -->
+  <g stroke="#F59E0B" stroke-width="4" stroke-linecap="round">
+    <path d="M110 8 L110 20"/>
+    <path d="M52 28 L60 38"/>
+    <path d="M168 28 L160 38"/>
+    <path d="M22 80 L34 84"/>
+    <path d="M198 80 L186 84"/>
+    <path d="M40 170 L50 162"/>
+    <path d="M180 170 L170 162"/>
+  </g>
+  <!-- head -->
+  <circle cx="110" cy="80" r="29" fill="#C68642"/>
+  <!-- black hair -->
+  <path d="M80 82 Q76 44 110 42 Q144 44 140 82 Q142 62 110 60 Q78 62 80 82 Z" fill="#1B1B1B"/>
+  <path d="M78 60 Q80 42 96 40 Q82 44 78 60 Z" fill="#1B1B1B"/>
+  <path d="M142 60 Q140 42 124 40 Q138 44 142 60 Z" fill="#1B1B1B"/>
+  <!-- moustache hint -->
+  <path d="M96 84 Q103 88 110 84 Q110 90 96 90 Z" fill="#1B1B1B" opacity="0.85"/>
+  <path d="M124 84 Q117 88 110 84 Q110 90 124 90 Z" fill="#1B1B1B" opacity="0.85"/>
+  <!-- happy eyes -->
+  <path d="M94 74 Q100 69 106 74" stroke="#1B1B1B" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M114 74 Q120 69 126 74" stroke="#1B1B1B" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- smile -->
+  <path d="M100 88 Q110 99 120 88" stroke="#B71C1C" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- blush -->
+  <circle cx="91" cy="82" r="5" fill="#FFAB91" opacity="0.7"/>
+  <circle cx="129" cy="82" r="5" fill="#FFAB91" opacity="0.7"/>
+  <!-- kurta -->
+  <path d="M84 112 Q80 160 82 205 L138 205 Q140 160 136 112 L123 108 Q110 116 97 108 Z" fill="url(#shirt)"/>
+  <path d="M104 108 L110 120 L116 108" stroke="#A7F3D0" stroke-width="3" fill="none"/>
+  <!-- trophy in raised right hand -->
+  <g transform="translate(150 70)">
+    <path d="M-6 0 L6 0 L4 14 L-4 14 Z" fill="#F59E0B"/>
+    <path d="M-8 -6 Q0 -12 8 -6 L6 0 L-6 0 Z" fill="#FCD34D" stroke="#D97706" stroke-width="1.5"/>
+    <path d="M-8 -6 Q-14 -2 -10 4 M8 -6 Q14 -2 10 4" stroke="#D97706" stroke-width="2.5" fill="none"/>
+    <circle cx="0" cy="18" r="4" fill="#F59E0B"/>
+  </g>
+  <!-- arms -->
+  <path d="M88 128 Q66 100 60 86" stroke="#C68642" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M132 128 Q150 106 156 88" stroke="#C68642" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <circle cx="60" cy="84" r="9" fill="#C68642"/>
+  <circle cx="156" cy="86" r="9" fill="#C68642"/>
+  <!-- confetti -->
+  <rect x="40" y="120" width="8" height="8" rx="2" fill="#3B82F6" transform="rotate(20 44 124)"/>
+  <rect x="176" y="120" width="8" height="8" rx="2" fill="#EC4899" transform="rotate(-25 180 124)"/>
+</svg>

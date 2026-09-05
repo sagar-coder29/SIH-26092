@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#A7F3D0"/>
+      <stop offset="100%" stop-color="#A5F3FC"/>
+    </radialGradient>
+    <linearGradient id="dress" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+  <circle cx="110" cy="105" r="100" fill="url(#bg)"/>
+  <circle cx="110" cy="105" r="100" fill="none" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="7 9"/>
+  <!-- flowers bg -->
+  <g>
+    <circle cx="40" cy="46" r="10" fill="#F472B6"/>
+    <circle cx="40" cy="46" r="5" fill="#FDE68A"/>
+    <circle cx="178" cy="54" r="10" fill="#F472B6"/>
+    <circle cx="178" cy="54" r="5" fill="#FDE68A"/>
+  </g>
+  <!-- head -->
+  <circle cx="110" cy="80" r="29" fill="#8D5A2B"/>
+  <!-- long dark hair -->
+  <path d="M80 82 Q72 44 110 42 Q148 44 140 82 L144 150 Q144 170 138 176 L136 150 Q136 130 134 116 L86 116 Q84 130 84 150 L82 176 Q76 170 76 150 Z" fill="#2C1810"/>
+  <path d="M84 60 Q88 44 110 42 Q132 44 136 60 Q110 52 84 60 Z" fill="#2C1810"/>
+  <!-- hair band -->
+  <path d="M80 66 Q110 56 140 66 Q110 62 80 66 Z" fill="#F59E0B"/>
+  <!-- happy eyes -->
+  <path d="M94 76 Q100 71 106 76" stroke="#2C1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M114 76 Q120 71 126 76" stroke="#2C1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- smile -->
+  <path d="M100 90 Q110 101 120 90" stroke="#A11D2E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- blush -->
+  <circle cx="91" cy="84" r="5" fill="#F8BBD0" opacity="0.8"/>
+  <circle cx="129" cy="84" r="5" fill="#F8BBD0" opacity="0.8"/>
+  <!-- pot / handicraft in arms -->
+  <rect x="86" y="150" width="48" height="34" rx="8" fill="#D97706"/>
+  <path d="M86 158 Q110 146 134 158" stroke="#B45309" stroke-width="4" fill="none"/>
+  <path d="M102 150 L110 140 L118 150" stroke="#B45309" stroke-width="3" fill="none"/>
+  <path d="M94 168 L100 168 M120 168 L126 168" stroke="#B45309" stroke-width="3" stroke-linecap="round"/>
+  <!-- body dress -->
+  <path d="M86 110 Q82 148 86 162 L88 178 Q88 196 100 204 L110 206 L120 204 Q132 196 132 178 L134 162 Q138 148 134 110 Q124 116 110 116 Q96 116 86 110 Z" fill="url(#dress)"/>
+  <!-- arms holding pot - hugging -->
+  <path d="M86 120 Q70 134 74 152 Q88 160 92 152" stroke="#8D5A2B" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <path d="M134 120 Q150 134 146 152 Q132 160 128 152" stroke="#8D5A2B" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <!-- hands -->
+  <circle cx="86" cy="120" r="9" fill="#8D5A2B"/>
+  <circle cx="134" cy="120" r="9" fill="#8D5A2B"/>
+</svg>

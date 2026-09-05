@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — Documents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+</head>
+<body class="doc-page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header class="header" id="pageHeader"></header>
+  <div class="inner-shell">
+    <div class="page-wrap">
+      <div class="page-head">
+        <div class="breadcrumb"><a href="dashboard.html">Dashboard</a> <span>›</span> <span>Documents</span></div>
+        <h1>Your Documents</h1>
+        <p class="sub">Upload documents to unlock more scheme applications. Each document you add can open new eligibility.</p>
+      </div>
+
+      <div class="readiness-band panel">
+        <div class="ring" style="--p:40" data-val="40%">40%</div>
+        <div class="rb-text">
+          <h3>Readiness Score: 40% <span style="color:var(--muted);font-weight:600;">(2/5 documents)</span></h3>
+          <p>💡 Upload Caste Certificate to unlock 2 more schemes (PMEGP, Stand-Up India, NSFDC).</p>
+        </div>
+      </div>
+
+      <div class="upload-grid" id="uploadGrid"></div>
+
+      <div class="panel" style="margin-top:24px;">
+        <div class="panel-title">🧩 Scheme Impact Map</div>
+        <div class="panel-sub">How your documents affect eligibility</div>
+        <p style="font-size:14px;line-height:1.7;color:var(--body);">
+          <strong>Uploading Caste Certificate</strong> makes you eligible for:
+          <span class="badge-pill eligible" style="margin:0 6px;">PMEGP</span>
+          <span class="badge-pill eligible" style="margin:0 6px;">Stand-Up India</span>
+          <span class="badge-pill eligible" style="margin:0 6px;">NSFDC</span>
+        </p>
+      </div>
+
+      <div class="action-row" style="margin-top:26px;justify-content:space-between;">
+        <a href="dashboard.html" class="btn btn-ghost btn-sm">← Back to Dashboard</a>
+        <a href="results.html" class="btn btn-accent btn-sm">Check Eligibility →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+
+  <script src="app.js"></script>
+  <script>
+    const DOCS = [
+      { name:'Aadhaar Card', ic:'🪪', st:'ok' },
+      { name:'PAN Card', ic:'💳', st:'ok' },
+      { name:'Caste Certificate', ic:'📜', st:'miss' },
+      { name:'Income Certificate', ic:'📊', st:'miss' },
+      { name:'Bank Statement', ic:'🏦', st:'miss' }
+    ];
+
+    function renderDocs() {
+      document.getElementById('uploadGrid').innerHTML = DOCS.map(d => `
+        <div class="upload-card ${d.st==='ok'?'uploaded':''}" onclick="handleUpload(this,'${d.name}')">
+          <div class="uc-ic">${d.ic}</div>
+          <div class="uc-name">${d.name}</div>
+          <div class="uc-state ${d.st==='ok'?'ok':'miss'}">${d.st==='ok'?'✔ Uploaded':'⬆ Click to Upload'}</div>
+        </div>
+      `).join('');
+    }
+
+    function handleUpload(el, name) {
+      if (!el.classList.contains('uploaded')) {
+        el.classList.add('uploaded');
+        el.querySelector('.uc-state').className = 'uc-state ok';
+        el.querySelector('.uc-state').textContent = '✔ Uploaded';
+        el.querySelector('.uc-ic').textContent = '✅';
+        alert(name + ' uploaded successfully (demo)');
+      } else {
+        alert(name + ' is already uploaded (demo)');
+      }
+    }
+
+    window.handleUpload = handleUpload;
+
+    renderDocs();
+    buildHeader('Documents');
+    buildFooter();
+    initMobileMenu();
+  </script>
+</body>
+</html>

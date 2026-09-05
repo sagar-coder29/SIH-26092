@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <style>
+    .hist-item {
+      border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+      margin-bottom: 12px; background: var(--surface);
+    }
+    .hist-q { font-weight: 700; color: var(--heading); margin-bottom: 6px; }
+    .hist-tag { font-size: 11px; color: var(--muted); letter-spacing: .3px; }
+    .hist-a { font-size: 14px; color: var(--body); margin-top: 8px; line-height: 1.65; }
+    .hist-a .qr-chip { cursor: default; margin: 0 3px; }
+  </style>
+</head>
+<body class="dash-page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header class="header" id="pageHeader"></header>
+  <div class="inner-shell">
+    <div class="page-wrap">
+      <div class="page-head">
+        <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Dashboard</span></div>
+        <h1 id="dashTitle">Welcome to your Dashboard</h1>
+        <p class="sub" id="dashSub">Here's your saved Q&A history and profile.</p>
+      </div>
+
+      <div class="dash-grid">
+        <div class="profile-side">
+          <div class="panel profile-card">
+            <div class="avatar-lg" id="avatar">?</div>
+            <div class="panel-title" id="profileName">Guest</div>
+            <div class="panel-sub" id="profileEmail">Not signed in</div>
+            <div class="field"><span class="k">Category</span><span class="v" id="pCategory">—</span></div>
+            <div class="field"><span class="k">Business</span><span class="v" id="pBusiness">—</span></div>
+            <div class="field"><span class="k">Stage</span><span class="v" id="pStage">—</span></div>
+            <div class="field"><span class="k">Amount</span><span class="v" id="pAmount">—</span></div>
+            <div class="field"><span class="k">Location</span><span class="v" id="pLocation">—</span></div>
+            <div class="action-row" style="margin-top:18px;">
+              <a href="chat.html" class="btn btn-outline btn-sm">Ask a question</a>
+              <a href="login.html" class="btn btn-accent btn-sm">Sign in</a>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">⚡ Quick Actions</div>
+            <div class="stat-chip-row">
+              <a href="chat.html" class="btn btn-outline btn-sm">Start New Chat</a>
+              <a href="documents.html" class="btn btn-outline btn-sm">Documents</a>
+              <a href="results.html" class="btn btn-outline btn-sm">Results</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:24px;flex:1;min-width:0;">
+          <div class="panel" id="aiSummary" style="display:none;">
+            <div class="panel-title">🤖 AI-Generated Summary</div>
+            <div id="aiGoal" style="font-size:15px;font-weight:700;color:var(--heading);margin-bottom:10px;"></div>
+            <p id="aiRecommendation" style="font-size:14px;line-height:1.7;color:var(--body);margin:0 0 14px;"></p>
+            <div class="stat-chip-row" id="aiStats"></div>
+            <div class="action-row" style="margin-top:16px;">
+              <a href="results.html" class="btn btn-accent btn-sm">View My Results →</a>
+              <a href="scheme.html?src=pmegp" class="btn btn-outline btn-sm" id="aiTopMatchLink">Top match details</a>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">🗓️ My Q&A History</div>
+            <div class="panel-sub" id="histSummary">Loading…</div>
+            <div id="historyList"></div>
+            <div id="historyEmpty" style="display:none;color:var(--muted);font-size:14px;padding:8px 0;">
+              No questions yet. <a href="chat.html" style="color:var(--secondary);font-weight:600;">Ask your first question →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function initials(name) {
+      if (!name) return '?';
+      return name.split(/\s+/).map(w => w[0]).join('').slice(0,2).toUpperCase();
+    }
+
+    function esc(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function renderCites(text){
+      return esc(text).replace(/\[([A-Za-z0-9_.\-]+)\]/g,'<span class="qr-chip" style="cursor:default;margin:0 3px;">$1</span>');
+    }
+
+    function renderProfile() {
+      const p = window.Sahayak.getProfile();
+      const u = window.Sahayak.currentUser();
+      const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent = v||'—'; };
+      set('pCategory', p.category);
+      set('pBusiness', p.business);
+      set('pStage', p.stage);
+      set('pAmount', p.amount);
+      set('pLocation', p.location);
+      if (u) {
+        document.getElementById('profileName').textContent = (u.user_metadata && u.user_metadata.full_name) || u.email || 'User';
+        document.getElementById('profileEmail').textContent = u.email || '';
+        document.getElementById('avatar').textContent = initials((u.user_metadata && u.user_metadata.full_name) || u.email);
+        document.getElementById('dashTitle').textContent = 'Welcome back, ' + ((u.email||'').split('@')[0]);
+      }
+    }
+
+    async function loadHistory() {
+      const u = window.Sahayak.currentUser();
+      let rows = [];
+      if (u) {
+        // Signed in: query Supabase directly — RLS lets users read their own rows.
+        try {
+          const { createClient } = window.supabase;
+          const sb = createClient(window.Sahayak.SUPABASE_URL, window.Sahayak.SUPABASE_ANON_KEY);
+          const { data, error } = await sb.from('chat_history')
+            .select('*').eq('user_id', u.id).order('created_at', { ascending: false }).limit(50);
+          if (!error && data) rows = data;
+        } catch (e) { /* fall through to local */ }
+      }
+      if (!rows.length) {
+        // Fallback: show locally-saved history from this browser.
+        rows = [];
+      }
+
+      const list = document.getElementById('historyList');
+      const count = document.getElementById('histSummary');
+
+      if (!rows.length) {
+        count.textContent = 'No server history found for this account yet.';
+        document.getElementById('historyEmpty').style.display = 'block';
+        list.innerHTML = '';
+        return;
+      }
+
+      count.textContent = rows.length + ' saved question' + (rows.length>1?'s':'');
+      document.getElementById('historyEmpty').style.display = 'none';
+      list.innerHTML = rows.map(r => `
+        <div class="hist-item">
+          <div class="hist-tag">${r.created_at ? new Date(r.created_at).toLocaleString() : ''}</div>
+          <div class="hist-q">Q: ${esc(r.query)}</div>
+          <div class="hist-tag">${(r.citations||[]).length} sources cited</div>
+          <div class="hist-a">${renderCites(r.answer)}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderAiSummary() {
+      const panel = document.getElementById('aiSummary');
+      let saved = null;
+      try { saved = JSON.parse(window.localStorage.getItem('sa_generated')); } catch (e) {}
+      if (!saved || !saved.generated) { panel.style.display = 'none'; return; }
+      const g = saved.generated;
+      const dash = g.dashboard || {};
+      const meta = window.SCHEME_CATALOG || {};
+
+      panel.style.display = 'block';
+      document.getElementById('aiGoal').textContent = '🎯 ' + (dash.goal || 'Your business goal');
+      document.getElementById('aiRecommendation').textContent = g.recommendation_summary || '';
+
+      const topMatchBase = (() => {
+        const m = (g.matched_schemes || [])[0] || {};
+        return (m.citations && m.citations[0] ? String(m.citations[0]).split('#')[0] : '') || 'pmegp';
+      })();
+      const topMatchName = g.top_match || 'Top match';
+      const topLink = document.getElementById('aiTopMatchLink');
+      if (topLink) { topLink.href = 'scheme.html?src=' + encodeURIComponent(topMatchBase); topLink.textContent = topMatchName + ' details'; }
+
+      const stats = [
+        ['Schemes', dash.schemes_considered != null ? dash.schemes_considered : '—'],
+        ['Sources cited', dash.sources_cited != null ? dash.sources_cited : '—'],
+        ['Category', dash.category || '—'],
+      ];
+      document.getElementById('aiStats').innerHTML = stats.map(([k, v]) =>
+        `<span style="background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12.5px;color:var(--muted);"><b style="color:var(--heading);">${esc(k)}:</b> ${esc(v)}</span>`
+      ).join(' ');
+    }
+
+    renderProfile();
+    renderAiSummary();
+    loadHistory();
+    buildHeader('Dashboard');
+    buildFooter();
+    initMobileMenu();
+  </script>
+</body>
+</html>

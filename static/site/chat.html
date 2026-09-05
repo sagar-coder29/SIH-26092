@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+</head>
+<body class="chat-page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header class="header" id="pageHeader"></header>
+  <div class="inner-shell">
+    <div class="page-wrap">
+      <div class="page-head">
+        <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Chat</span></div>
+        <h1>Tell us your goal</h1>
+        <p class="sub">मुझे बताइए आप क्या करना चाहते हैं — I'll match you with the right schemes using real source documents.</p>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="runDemo('demo1')">▶ Demo 1 · सिलाई व्यवसाय (Tailoring)</button>
+          <button class="btn btn-outline btn-sm" onclick="runDemo('demo2')">▶ Demo 2 · दुकान/गाड़ी (Street Vendor)</button>
+        </div>
+      </div>
+
+      <div class="chat-layout">
+        <div class="chat-box">
+          <div class="chat-canvas" id="chatCanvas">
+            <div class="chat-msg bot">
+              <div class="msg-avatar">🤖</div>
+              <div class="msg-bubble">नमस्ते! 🙏 बताइए आप क्या करना चाहते हैं? <br/><span style="font-size:12.5px;color:var(--muted);">Hello! Tell me your business goal and I'll explain which schemes may help — based on official source documents.</span></div>
+            </div>
+          </div>
+          <div class="chat-input-bar">
+            <textarea id="chatInput" rows="1" placeholder="मैं सिलाई का छोटा काम करता हूँ, 2 लाख चाहिए..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+            <button class="send-btn" onclick="send()">➤</button>
+          </div>
+          <div style="padding:12px 16px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <span>Tip: try <b>/demo1</b> (tailor) or <b>/demo2</b> (vendor) · <b>/clear</b> to reset chat</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button class="btn btn-ghost btn-sm" onclick="clearChat()" style="font-size:12px;">🗑️ Clear</button>
+              <button class="btn btn-accent" id="finishBtn" onclick="finishSession()" style="white-space:nowrap;">✓ Finish — Get My Results</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="profile-panel">
+          <div class="panel profile-card">
+            <div class="panel-title">👤 Your Profile</div>
+            <div class="panel-sub" id="profileEmail">Not signed in</div>
+            <div class="field"><span class="k">Category</span>
+              <select class="prof-sel" id="pCategory" onchange="updateProfile('category',this.value)">
+                <option value="">— select —</option>
+                <option value="General">General</option>
+                <option value="SC">SC (Scheduled Caste)</option>
+                <option value="ST">ST (Scheduled Tribe)</option>
+                <option value="OBC">OBC</option>
+                <option value="Minority">Minority</option>
+                <option value="Woman">Woman</option>
+                <option value="PwD">PwD</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field"><span class="k">Business</span>
+              <select class="prof-sel" id="pBusiness" onchange="updateProfile('business',this.value)">
+                <option value="">— select —</option>
+                <option value="Tailoring">Tailoring / सिलाई</option>
+                <option value="Street Vending">Street Vendor / गाड़ी-दुकान</option>
+                <option value="Retail Shop">Retail Shop / दुकान</option>
+                <option value="Agriculture">Agriculture / खेती</option>
+                <option value="Manufacturing">Manufacturing / उद्योग</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field"><span class="k">Stage</span>
+              <select class="prof-sel" id="pStage" onchange="updateProfile('stage',this.value)">
+                <option value="">— select —</option>
+                <option value="New venture">New / first venture</option>
+                <option value="Existing / expanding">Existing / expanding</option>
+              </select>
+            </div>
+            <div class="field"><span class="k">Amount</span>
+              <select class="prof-sel" id="pAmount" onchange="updateProfile('amount',this.value)">
+                <option value="">— select —</option>
+                <option value="10 thousand">₹10,000</option>
+                <option value="50 thousand">₹50,000</option>
+                <option value="1 lakh">₹1 Lakh</option>
+                <option value="2 lakh">₹2 Lakh</option>
+                <option value="5 lakh">₹5 Lakh</option>
+                <option value="10 lakh">₹10 Lakh+</option>
+              </select>
+            </div>
+            <div class="field"><span class="k">Location</span>
+              <select class="prof-sel" id="pLocation" onchange="updateProfile('location',this.value)">
+                <option value="">— select —</option>
+                <option value="Rural">Rural / गाँव</option>
+                <option value="Urban">Urban / शहर</option>
+              </select>
+            </div>
+            <div style="margin-top:10px;font-size:11.5px;color:var(--muted);">✏️ Change dropdowns anytime — profile updates live as you chat.</div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">🗂️ Sources Matched</div>
+            <div class="panel-sub">Scheme documents cited so far</div>
+            <div id="matchCount" style="font-size:34px;font-weight:900;color:var(--heading);">0</div>
+            <div style="font-size:13px;color:var(--muted);" id="matchDetail">Ask a question to begin</div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title">🔐 Account</div>
+            <div class="action-row" style="gap:8px;">
+              <a href="login.html" class="btn btn-outline btn-sm">Sign in</a>
+              <a href="dashboard.html" class="btn btn-accent btn-sm">Dashboard</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="action-row" style="margin-top:26px;justify-content:flex-end;">
+        <button class="btn btn-ghost btn-sm" onclick="location.href='index.html'">← Back to Home</button>
+        <a class="btn btn-accent btn-sm" href="dashboard.html">View My Q&A →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-config.js"></script>
+  <script src="app.js"></script>
+  <script src="chat-logic.js"></script>
+  <script>
+    buildHeader('Chat');
+    buildFooter();
+    initMobileMenu();
+  </script>
+</body>
+</html>

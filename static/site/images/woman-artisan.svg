@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#FBCFE8"/>
+    </radialGradient>
+    <linearGradient id="sari" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+  <!-- soft sun backdrop -->
+  <circle cx="110" cy="105" r="100" fill="url(#bg)"/>
+  <circle cx="110" cy="105" r="100" fill="none" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="8 10"/>
+  <!-- sparkles -->
+  <g fill="#F59E0B">
+    <path d="M30 40 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+    <path d="M185 35 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5z"/>
+    <path d="M30 170 l2.5 7 7 2.5 -7 2.5 -2.5 7 -2.5 -7 -7 -2.5 7 -2.5z"/>
+  </g>
+  <!-- happy woman artisan - head -->
+  <circle cx="110" cy="78" r="30" fill="#C68642"/>
+  <!-- hair -->
+  <path d="M78 82 Q74 44 110 44 Q146 44 142 82 L138 66 Q132 52 110 50 Q88 52 84 66 Z" fill="#3E2723"/>
+  <circle cx="80" cy="70" r="12" fill="#3E2723"/>
+  <circle cx="140" cy="70" r="12" fill="#3E2723"/>
+  <!-- bun -->
+  <circle cx="110" cy="42" r="13" fill="#3E2723"/>
+  <!-- closing happy eyes (smile arcs) -->
+  <path d="M94 76 Q100 71 106 76" stroke="#3E2723" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M114 76 Q120 71 126 76" stroke="#3E2723" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- smile -->
+  <path d="M100 90 Q110 100 120 90" stroke="#C62828" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- blush -->
+  <circle cx="92" cy="84" r="5" fill="#F48FB1" opacity="0.7"/>
+  <circle cx="128" cy="84" r="5" fill="#F48FB1" opacity="0.7"/>
+  <!-- body - sari -->
+  <path d="M80 108 Q74 170 78 205 L142 205 Q146 170 140 108 L120 104 Q110 112 100 104 Z" fill="url(#sari)"/>
+  <path d="M96 104 L104 205 M124 104 L116 205" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="3" fill="none"/>
+  <!-- blouse -->
+  <rect x="96" y="100" width="28" height="20" rx="6" fill="#A78BFA"/>
+  <!-- raised arms - joy -->
+  <g stroke="#C68642" stroke-width="12" stroke-linecap="round" fill="none">
+    <path d="M84 120 Q58 96 48 84"/>
+    <path d="M136 120 Q162 96 172 84"/>
+  </g>
+  <!-- open hands -->
+  <circle cx="46" cy="80" r="10" fill="#C68642"/>
+  <circle cx="174" cy="80" r="10" fill="#C68642"/>
+  <!-- rupee coins floating -->
+  <g fill="#F59E0B" stroke="#D97706" stroke-width="1.5">
+    <circle cx="52" cy="48" r="8"/><text x="49" y="52" font-size="9" fill="#78350F" font-weight="bold">₹</text>
+    <circle cx="170" cy="52" r="8"/><text x="167" y="56" font-size="9" fill="#78350F" font-weight="bold">₹</text>
+  </g>
+</svg>

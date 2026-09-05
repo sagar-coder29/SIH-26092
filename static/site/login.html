@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — Sign in</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <style>
+    .auth-card { max-width: 420px; margin: 40px auto; }
+    .auth-card .field { margin-bottom: 14px; }
+    .auth-card input {
+      width: 100%; padding: 12px 14px; border-radius: 10px;
+      border: 1.5px solid var(--border); font-size: 15px; font-family: var(--font);
+    }
+    .auth-card input:focus { outline: none; border-color: var(--secondary); }
+    .auth-msg { font-size: 13.5px; margin-top: 12px; min-height: 18px; color: var(--muted); }
+    .auth-msg.err { color: var(--error); }
+    .auth-msg.ok { color: var(--success); }
+  </style>
+</head>
+<body class="page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header class="header" id="pageHeader"></header>
+  <div class="inner-shell">
+    <div class="page-wrap">
+      <div class="page-head">
+        <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Sign in</span></div>
+        <h1>Sign in / Sign up</h1>
+        <p class="sub">Log in to save your Q&A history in the dashboard.</p>
+      </div>
+
+      <div class="panel auth-card">
+        <div class="panel-title" id="authTitle">Sign in</div>
+        <div class="panel-sub">Email & password · your history is stored per-account</div>
+
+        <div class="field"><span class="k">Name (optional)</span>
+          <input type="text" id="authName" placeholder="Ram Kumar" autocomplete="name" />
+        </div>
+        <div class="field"><span class="k">Email</span>
+          <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="field"><span class="k">Password</span>
+          <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+
+        <div class="auth-msg" id="authMsg"></div>
+
+        <div class="action-row" style="gap:10px;">
+          <button class="btn btn-accent" id="authBtn" onclick="doAuth()">Sign in</button>
+          <button class="btn btn-ghost" onclick="toggleMode()" id="authToggle">Create account instead</button>
+        </div>
+
+        <div style="margin-top:18px;text-align:center;font-size:13px;">
+          <a href="chat.html">← Continue as guest (Browse)</a>
+        </div>
+
+        <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:18px;">
+          <div style="font-size:13px;font-weight:600;color:var(--heading);margin-bottom:10px;">🎯 Demo Accounts — try instantly</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="demoLogin('tailor','Tailor (SC)')">🧑‍🔧 Tailor Account</button>
+            <button class="btn btn-outline btn-sm" onclick="demoLogin('vendor','Vendor (OBC)')">🛒 Vendor Account</button>
+          </div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:8px;">No password needed — one tap signs you in as a demo user.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let signUpMode = false;
+
+    function setMsg(txt, cls) {
+      const m = document.getElementById('authMsg');
+      m.textContent = txt;
+      m.className = 'auth-msg' + (cls ? ' ' + cls : '');
+    }
+
+    function toggleMode() {
+      signUpMode = !signUpMode;
+      document.getElementById('authTitle').textContent = signUpMode ? 'Create account' : 'Sign in';
+      document.getElementById('authBtn').textContent = signUpMode ? 'Sign up' : 'Sign in';
+      document.getElementById('authToggle').textContent = signUpMode ? 'Already have an account? Sign in' : 'Create account instead';
+      document.getElementById('authName').style.display = signUpMode ? 'block' : 'none';
+      setMsg('');
+    }
+
+    async function doAuth() {
+      const email = document.getElementById('authEmail').value.trim();
+      const pass = document.getElementById('authPass').value;
+      if (!email || !pass) { setMsg('Please enter email and password.', 'err'); return; }
+
+      const sb = window.Sahayak.supabase;
+      const supabase = await (async () => {
+        if (!sb) throw new Error('Supabase unavailable');
+        // re-initialize a working client
+        const { createClient } = window.supabase;
+        return createClient(window.Sahayak.SUPABASE_URL, window.Sahayak.SUPABASE_ANON_KEY);
+      })();
+
+      try {
+        if (signUpMode) {
+          const name = document.getElementById('authName').value.trim();
+          const { data, error } = await supabase.auth.signUp({
+            email, password,
+            options: { data: { full_name: name } },
+          });
+          if (error) throw error;
+          setMsg('Account created! Check your email to confirm (or you\'re signed in now). Redirecting…', 'ok');
+        } else {
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          if (data.session) {
+            window.Sahayak.saveSession(data.session);
+            setMsg('Signed in! Redirecting…', 'ok');
+          }
+        }
+        setTimeout(() => { location.href = 'dashboard.html'; }, 1200);
+      } catch (e) {
+        setMsg(e.message || 'Authentication failed.', 'err');
+      }
+    }
+
+    window.doAuth = doAuth;
+    window.toggleMode = toggleMode;
+    window.demoLogin = function(id, name) {
+      // Create a fake Supabase-shaped session so currentUser() works everywhere
+      const fakeSession = {
+        user: {
+          id: 'demo-' + id,
+          email: id + '@sahayakai.in',
+          user_metadata: { full_name: name },
+        },
+        access_token: 'demo-token-' + id,
+      };
+      window.Sahayak.saveSession(fakeSession);
+      setMsg('Signed in as ' + name + '! Redirecting…', 'ok');
+      setTimeout(() => { location.href = 'chat.html'; }, 800);
+    };
+
+    buildHeader('Dashboard');
+    buildFooter();
+    initMobileMenu();
+  </script>
+</body>
+</html>

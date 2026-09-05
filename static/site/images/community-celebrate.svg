@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#CADBFF"/>
+      <stop offset="100%" stop-color="#FBCFE8"/>
+    </radialGradient>
+  </defs>
+  <circle cx="110" cy="105" r="100" fill="url(#bg)"/>
+  <circle cx="110" cy="105" r="100" fill="none" stroke="#FFFFFF" stroke-opacity="0.7" stroke-width="3" stroke-dasharray="8 8"/>
+  <!-- happy hearts -->
+  <g>
+    <path d="M34 52 q-6 -10 2 -14 q8 -4 12 4 q-2 -8 8 -8 q10 0 6 10 q-4 6 -10 8 q4 -2 10 -10" fill="none"/>
+    <text x="30" y="60" font-size="18" fill="#EC4899">❤️</text>
+    <text x="176" y="64" font-size="16" fill="#EC4899">❤️</text>
+  </g>
+  <!-- character 1 left (woman, raised arm) -->
+  <g>
+    <circle cx="74" cy="96" r="20" fill="#C68642"/>
+    <path d="M54 98 Q52 72 74 70 Q96 72 94 98 Q96 84 74 82 Q52 84 54 98 Z" fill="#2C1810"/>
+    <path d="M52 84 Q54 66 72 64 Q64 70 52 84 Z" fill="#2C1810"/>
+    <circle cx="82" cy="68" r="9" fill="#2C1810"/>
+    <path d="M64 92 Q69 88 74 92" stroke="#2C1810" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M80 92 Q85 88 90 92" stroke="#2C1810" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M68 102 Q74 108 80 102" stroke="#A11D2E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M58 116 Q56 156 58 176 L90 176 Q92 156 90 116 Z" fill="#EC4899"/>
+    <path d="M58 122 Q58 126 62 128 M90 122 Q90 126 86 128" stroke="#C68642" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <!-- character 2 center front (tall man) -->
+  <g>
+    <circle cx="112" cy="126" r="21" fill="#E0AC69"/>
+    <path d="M91 128 Q89 98 112 96 Q135 98 133 128 Q135 108 112 106 Q89 108 91 128 Z" fill="#1B1B1B"/>
+    <path d="M112 70 Q112 72 112 74 M100 74 Q106 78 112 74" stroke="#1B1B1B" stroke-width="3" fill="none"/>
+    <path d="M96 124 Q101 128 108 124 M116 124 Q123 128 128 124" stroke="#1B1B1B" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M103 138 Q112 145 121 138" stroke="#B71C1C" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M94 148 Q92 174 94 196 L130 196 Q132 174 130 148 Z" fill="#1E3A8A"/>
+    <path d="M112 150 L112 196 M102 148 Q104 168 102 184 M122 148 Q120 168 122 184" stroke="#3B82F6" stroke-width="2" fill="none"/>
+    <!-- both arms up victory -->
+    <path d="M94 150 Q74 116 70 92" stroke="#E0AC69" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M130 150 Q150 116 154 92" stroke="#E0AC69" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <circle cx="70" cy="90" r="8" fill="#E0AC69"/>
+    <circle cx="154" cy="90" r="8" fill="#E0AC69"/>
+  </g>
+  <!-- character 3 right (elder woman) -->
+  <g>
+    <circle cx="152" cy="104" r="19" fill="#8D5A2B"/>
+    <path d="M133 106 Q131 80 152 78 Q173 80 171 106 Q173 92 152 90 Q131 92 133 106 Z" fill="#F8F8F8"/>
+    <circle cx="152" cy="76" r="10" fill="#F8F8F8"/>
+    <path d="M144 100 Q149 96 154 100" stroke="#2C1810" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M158 100 Q163 96 168 100" stroke="#2C1810" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M146 110 Q152 116 158 110" stroke="#A11D2E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M138 124 Q136 152 138 190 L166 190 Q168 152 166 124 Z" fill="#7C3AED"/>
+    <path d="M152 124 L152 190 M146 124 Q144 150 146 160" stroke="#DDD6FE" stroke-width="2" fill="none"/>
+    <path d="M138 130 Q118 118 116 104" stroke="#8D5A2B" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <circle cx="116" cy="102" r="7" fill="#8D5A2B"/>
+  </g>
+</svg>

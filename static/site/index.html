@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — AI-Driven Scheme Matching for Entrepreneurs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 🎆 moving background: particles + floating shapes + orbs -->
+  <canvas id="particles"></canvas>
+  <div class="float-shape fs-1">₹</div>
+  <div class="float-shape fs-2">📄</div>
+  <div class="float-shape fs-3">⭐</div>
+  <div class="float-shape fs-4">💼</div>
+  <div class="float-shape fs-5">🤝</div>
+  <div class="float-shape fs-6">🏆</div>
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <a href="#" class="logo">
+      <div class="logo-icon">S</div>
+      <div class="logo-text">Sahayak</div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="chat.html">Chat</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="documents.html">Documents</a></li>
+      <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
+    </ul>
+    <div class="header-actions">
+      <div class="lang-toggle" id="langToggle" data-lang="hi">
+        <div class="lang-pill"></div>
+        <button class="lang-btn active" onclick="setLang('hi')">हिन्दी</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="chat.html" class="btn btn-accent" style="padding:9px 22px;font-size:13px;" data-i18n="cta.getStarted">Get Started</a>
+      <button class="mobile-menu-btn" id="mobileBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="floaty floaty-1">🎯</div>
+    <div class="floaty floaty-2">💡</div>
+    <div class="floaty floaty-3">🏦</div>
+    <div class="floaty floaty-4">🪙</div>
+    <div class="floaty floaty-5">✅</div>
+
+    <div class="hero-inner">
+      <h1 data-i18n="hero.title">अपना सपना बताइए,<br/><span class="lit">सही योजना</span> पाइए</h1>
+      <p data-i18n="hero.sub">Tell us what you want to achieve, and we'll match you with the right government schemes. No long forms — just speak your goal in Hindi or English.</p>
+
+      <div class="hero-input-wrap">
+        <input class="hero-input" id="heroInput" type="text" placeholder="मैं सिलाई का छोटा काम करता हूँ, 2 लाख चाहिए..." onkeydown="if(event.key==='Enter'){event.preventDefault();location.href='chat.html';}" />
+        <button class="icon-btn hero-voice" title="Voice" onclick="alert('Voice input coming soon (Bhashini roadmap)')">🎤</button>
+        <button class="icon-btn hero-send" title="Search" onclick="location.href='chat.html'">→</button>
+      </div>
+      <p class="hero-hint" data-i18n="hero.hint">हिंदी या English — दोनों समझते हैं</p>
+
+      <div class="quick-start">
+        <button class="chip" onclick="location.href='chat.html'" data-i18n="hero.q1">💰 Funding</button>
+        <button class="chip" onclick="location.href='chat.html'" data-i18n="hero.q2">🏭 Equipment</button>
+        <button class="chip" onclick="location.href='chat.html'" data-i18n="hero.q3">🚀 Start Up</button>
+        <button class="chip" onclick="location.href='chat.html'" data-i18n="hero.q4">📚 Skills</button>
+      </div>
+
+      <!-- 3D tilt live chat with happy people floating around -->
+      <div class="tilt-zone" id="tiltZone">
+        <div class="chat-frame">
+          <div class="chat-card" id="chatCard">
+            <div class="chat-head">
+              <div class="chat-avatar">🤖</div>
+              <div style="flex:1;">
+                <strong data-i18n="mock.name" style="font-size:15px;color:var(--heading);">Sahayak सहायक</strong><br/>
+                <span class="live"><span></span><span data-i18n="mock.status">Online · बताइए आप क्या चाहते हैं</span></span>
+              </div>
+            </div>
+            <div id="chatBody">
+              <div class="chat-line bot"><div class="bubble" data-i18n="mock.greeting">नमस्ते! 🙏 बताइए आप क्या करना चाहते हैं?</div></div>
+            </div>
+          </div>
+          <div class="float-person fp-1"><img src="images/woman-artisan.svg" alt="Happy artisan" /></div>
+          <div class="float-person fp-2"><img src="images/man-tailor.svg" alt="Happy tailor" /></div>
+          <div class="float-person fp-3"><img src="images/woman-handicraft.svg" alt="Happy artisan" /></div>
+        </div>
+      </div>
+
+      <!-- marquee -->
+      <div class="hero-marquee marquee" style="margin-top:44px;">
+        <div class="marquee-track" id="marqueeTrack">
+          <span class="mini-pill">🏦 PMEGP</span><span class="mini-pill">💼 MUDRA</span><span class="mini-pill">🤝 Stand-Up India</span><span class="mini-pill">🎓 ASIIM</span><span class="mini-pill">🏗️ NSFDC</span><span class="mini-pill">🌸 Nai Roshni</span><span class="mini-pill">🛠️ DDU-GKY</span><span class="mini-pill">🚀 Entrepreneurship</span>
+        </div>
+      </div>
+
+      <!-- happy people row -->
+      <div class="hero-people-row">
+        <div class="hero-person"><img src="images/woman-artisan.svg" alt="Happy artisan" /></div>
+        <div class="hero-person"><img src="images/man-tailor.svg" alt="Happy tailor" /></div>
+        <div class="hero-person"><img src="images/woman-entrepreneur.svg" alt="Woman entrepreneur" /></div>
+        <div class="hero-person"><img src="images/shopkeeper.svg" alt="Happy shopkeeper" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS DOCUMENTATION -->
+  <section class="section" id="components">
+    <span class="label">Components</span>
+    <h2 class="title"><span class="reveal-txt">The smallest building blocks you can take</span></h2>
+    <p class="desc">A component is one interactive element: a hero, a navbar, a pricing table, a card, a form. It is the smallest thing you can take, and the only catalogue that reaches every surface we support.</p>
+
+    <div class="doc-content reveal">
+      <div class="doc-callout">
+        <strong>Every entry is a running component</strong> rather than a snippet in a documentation page. You open it, it renders. You change its controls, the preview responds. Whatever you settle on is what gets written into your project, so there is no second round of adjusting after the paste.
+      </div>
+
+      <h3 class="doc-heading">Components, sections, or templates?</h3>
+      <p>All three deliver real source you own. They differ in how much of the page they cover, and in which surfaces can receive them.</p>
+
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Covers</th>
+              <th>Framer</th>
+              <th>Code</th>
+              <th>MCP</th>
+              <th>CLI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Components</strong></td>
+              <td>One element</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><a href="#sections">Sections</a></td>
+              <td>A page band and its children</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><a href="#templates">Templates</a></td>
+              <td>A whole project</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Prompt</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="doc-note">Reach for a component when you need one piece and already have a page to put it in. If you are building the band itself, a section saves you wiring the children together. Framer support is components only.</p>
+
+      <h3 class="doc-heading">Before you start</h3>
+      <ul class="doc-list">
+        <li><strong>An account</strong>, to take anything. Browsing, previewing, and tweaking are open and cost nothing. Copying and installing need you signed in.</li>
+        <li><strong>Node</strong>, for the CLI. Only if you install rather than paste. Nothing to install globally: <code>npx</code> fetches it per run.</li>
+        <li><strong>An API key</strong>, for MCP and scripts. Not for interactive use. <code>originkit login</code> signs the CLI in through your browser instead. Keys live in Settings → API Integration.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <span class="label" data-i18n="how.label">How It Works</span>
+    <h2 class="title"><span class="reveal-txt" data-i18n="how.title">Three simple steps to find your perfect scheme</span></h2>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-num">1</div>
+        <h3 data-i18n="how.s1.title">Tell Your Goal</h3>
+        <p data-i18n="how.s1.desc">Type or speak about your business goal in your own words — Hindi or English.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">2</div>
+        <h3 data-i18n="how.s2.title">Get Matched</h3>
+        <p data-i18n="how.s2.desc">Our AI checks your profile against 15+ verified government schemes — no guessing.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">3</div>
+        <h3 data-i18n="how.s3.title">Apply with Confidence</h3>
+        <p data-i18n="how.s3.desc">See your top schemes ranked with reasons, required documents, and a direct apply link.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-band">
+    <div class="stats-grid">
+      <div class="stat-item"><h2 class="counter" data-count="15" data-suffix="+">0</h2><p data-i18n="stats.schemes">Verified Govt Schemes</p></div>
+      <div class="stat-item"><h2 class="counter" data-count="92" data-suffix="%">0</h2><p data-i18n="stats.accuracy">Matching Accuracy</p></div>
+      <div class="stat-item"><h2 class="counter" data-count="70" data-suffix="%">0</h2><p data-i18n="stats.time">Less Search Time</p></div>
+      <div class="stat-item"><h2 class="counter" data-count="100" data-suffix="%">0</h2><p data-i18n="stats.free">Free For All</p></div>
+    </div>
+  </section>
+
+  <!-- TRUST MARQUEE -->
+  <section class="trust-strip">
+    <div class="trust-track" id="trustTrack">
+      <span class="trust-chip">🎯 Digital India</span><span class="trust-chip">🏛️ MoSJE</span><span class="trust-chip">🏭 Atmanirbhar Bharat</span><span class="trust-chip">🎓 Skill India</span><span class="trust-chip">🌐 Make in India</span><span class="trust-chip">♻️ Startup India</span>
+    </div>
+  </section>
+
+  <!-- HAPPY PEOPLE BAND (photo strip) -->
+  <section class="people-band" aria-label="Happy entrepreneurs">
+    <div class="people-marquee" id="peopleMarquee">
+      <img src="images/woman-artisan.svg" alt="" /><img src="images/man-tailor.svg" alt="" /><img src="images/woman-handicraft.svg" alt="" /><img src="images/shopkeeper.svg" alt="" /><img src="images/community-celebrate.svg" alt="" /><img src="images/woman-entrepreneur.svg" alt="" /><img src="images/family-happy.svg" alt="" />
+    </div>
+  </section>
+
+  <!-- SCHEMES -->
+  <section class="section" id="schemes">
+    <span class="label" data-i18n="schemes.label">Featured Schemes</span>
+    <h2 class="title"><span class="reveal-txt" data-i18n="schemes.title">Government schemes tailored for you</span></h2>
+    <p class="desc" data-i18n="schemes.desc">Verified schemes curated for SC, OBC, ST, PwD, and marginalized entrepreneurs.</p>
+    <div class="filter-row" id="filterRow">
+      <button class="filter-chip active" data-filter="all">✨ All</button>
+      <button class="filter-chip" data-filter="funding">💵 Funding</button>
+      <button class="filter-chip" data-filter="loan">🏦 Loans</button>
+      <button class="filter-chip" data-filter="skill">🎓 Skill</button>
+      <button class="filter-chip" data-filter="women">🌸 Women</button>
+    </div>
+    <div class="schemes-grid" id="schemesGrid"></div>
+  </section>
+
+  <!-- WHY -->
+  <section class="section" id="why">
+    <span class="label" data-i18n="why.label">Why Sahayak</span>
+    <h2 class="title"><span class="reveal-txt" data-i18n="why.title">Not just another scheme search</span></h2>
+    <p class="desc" data-i18n="why.desc">We go beyond discovery — we understand your goal, explain why each fits, and prepare you to apply.</p>
+    <div class="why-grid">
+      <div class="why-card reveal"><div class="why-icon" style="background:#F3EAD8;color:var(--primary-light);">🧠</div><h3 data-i18n="why.c1.t">Business Goal Understanding</h3><p data-i18n="why.c1.d">We extract structured requirements from natural language, not rigid forms.</p></div>
+      <div class="why-card reveal"><div class="why-icon" style="background:#EAF3DC;color:var(--success);">✅</div><h3 data-i18n="why.c2.t">Deterministic Eligibility</h3><p data-i18n="why.c2.d">Eligibility decided by verified rules, not AI guessing — auditable with citations.</p></div>
+      <div class="why-card reveal"><div class="why-icon" style="background:#F3E0C0;color:#8A5A2B;">📖</div><h3 data-i18n="why.c3.t">Explainable Recommendations</h3><p data-i18n="why.c3.d">We explain WHY each scheme fits you with evidence from official sources.</p></div>
+      <div class="why-card reveal"><div class="why-icon" style="background:#EEE3D2;color:var(--secondary);">📋</div><h3 data-i18n="why.c4.t">Document Readiness</h3><p data-i18n="why.c4.d">See which documents you have and which you need before applying.</p></div>
+      <div class="why-card reveal"><div class="why-icon" style="background:#F7E0D2;color:var(--pink);">🗣️</div><h3 data-i18n="why.c5.t">Hindi & English</h3><p data-i18n="why.c5.d">Speak or type in Hindi or English — built for India's linguistic diversity.</p></div>
+      <div class="why-card reveal"><div class="why-icon" style="background:#E2F0DE;color:var(--success);">🔒</div><h3 data-i18n="why.c6.t">Data Privacy</h3><p data-i18n="why.c6.d">Your data stays minimal and encrypted. Never shared with third parties.</p></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="testimonials">
+    <span class="label" data-i18n="testi.label">Success Stories</span>
+    <h2 class="title"><span class="reveal-txt" data-i18n="testi.title">Real entrepreneurs, real support</span></h2>
+    <div class="testi-grid">
+      <div class="testi reveal"><div><span class="quote-mark">"</span><p data-i18n="testi.t1">Sahayak told me in 3 minutes which scheme I qualify for and exactly which documents I need.</p></div><div class="person"><div class="t-avatar"><img src="images/man-tailor.svg" alt="Ram Kumar" /></div><div><div class="t-name" data-i18n="testi.t1n">Ram Kumar</div><div class="t-role" data-i18n="testi.t1r">Tailor, Bihar</div></div><div class="t-stars" style="margin-left:auto;">★★★★★</div></div></div>
+      <div class="testi reveal"><div><span class="quote-mark">"</span><p data-i18n="testi.t2">I can't read English documents. The Hindi interface and step-by-step checklist changed everything.</p></div><div class="person"><div class="t-avatar"><img src="images/woman-artisan.svg" alt="Priya Sharma" /></div><div><div class="t-name" data-i18n="testi.t2n">Priya Sharma</div><div class="t-role" data-i18n="testi.t2r">Artisan, Rajasthan</div></div><div class="t-stars" style="margin-left:auto;">★★★★★</div></div></div>
+      <div class="testi reveal"><div><span class="quote-mark">"</span><p data-i18n="testi.t3">The explanations made me understand WHY I qualify. I talked to the bank with confidence.</p></div><div class="person"><div class="t-avatar"><img src="images/shopkeeper.svg" alt="Arif Mohammad" /></div><div><div class="t-name" data-i18n="testi.t3n">Arif Mohammad</div><div class="t-role" data-i18n="testi.t3r">Shop Owner, UP</div></div><div class="t-stars" style="margin-left:auto;">★★★★★</div></div></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <span class="label" data-i18n="faq.label">FAQ</span>
+    <h2 class="title" style="text-align:center;"><span class="reveal-txt" data-i18n="faq.title">Frequently asked questions</span></h2>
+    <div style="height:40px;"></div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq.q1">Is Sahayak really free?</span><span class="faq-chev"><svg viewBox="0 0 16 16" fill="none" stroke="#8A7968" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg></span></button><div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a1">Yes, completely free for all users. No hidden charges, ever.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq.q2">How is my personal data protected?</span><span class="faq-chev"><svg viewBox="0 0 16 16" fill="none" stroke="#8A7968" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg></span></button><div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a2">We collect only minimal info needed for eligibility. It is encrypted and never shared.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq.q3">Do I need computer skills to use it?</span><span class="faq-chev"><svg viewBox="0 0 16 16" fill="none" stroke="#8A7968" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg></span></button><div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a3">No. Just talk naturally in Hindi or English. Voice support is coming soon.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span data-i18n="faq.q4">Which states are covered?</span><span class="faq-chev"><svg viewBox="0 0 16 16" fill="none" stroke="#8A7968" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg></span></button><div class="faq-a"><div class="faq-a-inner" data-i18n="faq.a4">Our central schemes cover all of India. State schemes are being added.</div></div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <div class="cta-inner reveal">
+      <div class="cta-content">
+        <h2 data-i18n="cta.title">Ready to find the right scheme<br/>for your business?</h2>
+        <p data-i18n="cta.sub">Join thousands of entrepreneurs turning their goals into reality with the right government support.</p>
+        <div class="cta-btns">
+          <a href="chat.html" class="btn btn-white btn-lg" style="font-size:17px;padding:15px 34px;" data-i18n="cta.primary">Start Now — It's Free</a>
+          <a href="#how" class="btn btn-ghost btn-lg" style="font-size:17px;padding:15px 34px;color:#fff;border-color:rgba(255,255,255,0.6);" data-i18n="cta.secondary">Learn How It Works</a>
+        </div>
+      </div>
+      <div class="collage" aria-label="Happy entrepreneurs">
+        <img src="images/community-celebrate.svg" alt="" /><img src="images/family-happy.svg" alt="" /><img src="images/woman-entrepreneur.svg" alt="" /><img src="images/woman-handicraft.svg" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-text">Sahayak</div>
+        <p data-i18n="footer.tagline" style="font-size:13px;line-height:1.6;">AI-Driven Scheme Matching for Every Indian Entrepreneur.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col"><h4>Platform</h4><a href="chat.html">How It Works</a><a href="results.html">Browse Schemes</a><a href="dashboard.html">Dashboard</a></div>
+        <div class="footer-col"><h4>Support</h4><a href="#faq">FAQ</a><a href="#">Help Center</a><a href="#">Find a CSC</a><a href="#">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Sahayak</span><span>Ministry of Social Justice &amp; Empowerment (MoSJE)</span></div>
+  </footer>
+
+  <script src="scheme-catalog.js"></script>
+  <script>
+    /* ═══════════ SCHEME DATA ═══════════
+       The browse grid is built from the live scheme catalog (scheme-catalog.js),
+       which holds the verified names, ministries, amounts, categories, types and
+       official portals for the indexed documents. The presentation fields below
+       (iconBg/iconCol/desc/score/badge/filter) only style each card; clicking it
+       opens the LIVE detail page for the same document that the chatbot cites. */
+    const SCHEME_PRESENT = {
+      pmegp:  { id:'pmegp', iconBg:'#F3EAD8', iconCol:'#3B82F6', desc:'PM Employment Generation Programme — loan up to ₹50L (mfg) / ₹20L (service) with a 15–35% margin subsidy for new enterprises.', score:94, filter:['funding','loan'], badge:'eligible' },
+      mudra:  { id:'mudra', iconBg:'#EAF3DC', iconCol:'#22C55E', desc:'Collateral-free working-capital loans: Shishu (₹50K), Kishor (₹5L), Tarun (₹10L) and Tarun Plus (₹20L) for micro enterprises.', score:88, filter:['loan'], badge:'popular' },
+      standup:{ id:'standup', iconBg:'#F3E0C0', iconCol:'#F59E0B', desc:'Bank loans from ₹10L to ₹1Cr for SC/ST and women entrepreneurs for greenfield (first) enterprises.', score:85, filter:['funding','women'], badge:'new' },
+      asiiim: { id:'asiiim', iconBg:'#EEE3D2', iconCol:'#7C3AED', desc:'Ambedkar Social Innovation & Incubation Mission — ₹30L equity over 3 years for SC youth in incubation.', score:80, filter:['skill'], badge:'eligible' },
+      nsfdc:  { id:'nsfdc', iconBg:'#F5E6D3', iconCol:'#EA580C', desc:'Concessional loans (micro ₹1.25L @6.5%, term up to ₹45L @8%) for SC entrepreneurs.', score:90, filter:['loan','funding'], badge:'popular' },
+      'nai-roshni': { id:'nai-roshni', iconBg:'#F7E0D2', iconCol:'#DB2777', desc:'Leadership development for women from minority communities — free skill training and capacity building.', score:78, filter:['skill','women'], badge:'new' },
+      'ddu-gky': { id:'ddu-gky', iconBg:'#E7ECEA', iconCol:'#0891B2', desc:'Deen Dayal Upadhyaya — free placement-linked skill training + stipend for rural youth (15–35).', score:82, filter:['skill'], badge:'eligible' },
+      'pm-svanidhi': { id:'pm-svanidhi', iconBg:'#E8F1F6', iconCol:'#0EA5E9', desc:'PM SVANidhi — small collateral-free loans for street vendors (₹10K / ₹20K / ₹50K) with interest subsidy.', score:86, filter:['loan'], badge:'popular' },
+      'pm-vishwakarma': { id:'pm-vishwakarma', iconBg:'#F3EAD8', iconCol:'#D97706', desc:'PM Vishwakarma — ₹1L + ₹2L collateral-free loan @5%, ₹15K toolkit and skill stipend for 18 artisanal trades.', score:88, filter:['funding','skill'], badge:'new' },
+      cgtmse: { id:'cgtmse', iconBg:'#EAF3DC', iconCol:'#16A34A', desc:'CGTMSE — credit guarantee (75–85% cover, up to ₹10Cr) that lets MSEs borrow without collateral.', score:84, filter:['funding','loan'], badge:'eligible' },
+    };
+    const badgeText = { eligible:'Eligible', popular:'Popular', new:'New' };
+    const SCHEMES = Object.keys(window.SCHEME_CATALOG).map(base => {
+      const cat = window.SCHEME_CATALOG[base];
+      const pres = SCHEME_PRESENT[cat.id] || {};
+      return {
+        base, src: base, id: cat.id,
+        name: cat.name, fullName: cat.fullName, icon: cat.icon,
+        ministry: cat.ministry, amount: cat.amount, cat: cat.category, type: cat.type,
+        portal: cat.portal,
+        iconBg: pres.iconBg || '#F3EAD8', iconCol: pres.iconCol || '#3B82F6',
+        desc: pres.desc || cat.fullName, score: pres.score != null ? pres.score : 80,
+        filter: pres.filter || ['all'], badge: pres.badge || 'eligible',
+      };
+    });
+
+    const grid = document.getElementById('schemesGrid');
+    function renderSchemes(filter) {
+      grid.innerHTML = '';
+      SCHEMES.forEach((s, i) => {
+        if (filter !== 'all' && !s.filter.includes(filter)) return;
+        const c = document.createElement('div');
+        c.className = 'scheme-card';
+        c.style.animationDelay = (i * 70) + 'ms';
+        c.onclick = () => { location.href = 'scheme.html?src=' + encodeURIComponent(s.src); };
+        c.innerHTML = `
+          <div class="shine"></div>
+          <div class="scheme-header">
+            <div class="scheme-icon" style="background:${s.iconBg};color:${s.iconCol};">${s.icon}</div>
+            <div class="badges"><span class="s-badge bd-${s.badge}">${badgeText[s.badge]}</span></div>
+          </div>
+          <h3>${s.name}</h3><p class="ministry">${s.ministry}</p><p class="dsc">${s.desc}</p>
+          <div class="scheme-meta">
+            <div class="meta-item"><span class="meta-label">Amount</span><span class="meta-value">${s.amount}</span></div>
+            <div class="meta-item"><span class="meta-label">Category</span><span class="meta-value">${s.cat}</span></div>
+            <div class="meta-item"><span class="meta-label">Type</span><span class="meta-value">${s.type}</span></div>
+          </div>
+          <div class="meta-item" style="grid-column:1/-1;margin-top:14px;"><span class="meta-label">Official Portal</span><span class="meta-value" style="font-size:12.5px;color:#6B7280;word-break:break-all;">${s.portal}</span></div>`;
+        grid.appendChild(c);
+      });
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        document.querySelectorAll('.mini-fill').forEach(f => { f.style.width = f.dataset.w + '%'; });
+      }));
+    }
+    renderSchemes('all');
+
+    document.getElementById('filterRow').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-chip');
+      if (!btn) return;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      renderSchemes(btn.dataset.filter);
+    });
+
+    /* ═══════════ 3D TILT on chat card (spring-like) ═══════════ */
+    const zone = document.getElementById('tiltZone');
+    const card = document.getElementById('chatCard');
+    if (zone && card && window.matchMedia('(hover:hover)').matches) {
+      zone.addEventListener('mousemove', (e) => {
+        const r = zone.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `translateY(-14px) rotateY(${px*10}deg) rotateX(${-py*10}deg)`;
+      });
+      zone.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    }
+
+    /* ═══════════ LIVE CHAT SEQUENCE ═══════════ */
+    (function(){
+      const body = document.getElementById('chatBody');
+      const greeting = body.querySelector('.chat-line');
+      greeting.style.opacity = 1; greeting.style.transform = 'translateY(0)';
+      greeting.style.transition = 'opacity 300ms ease, transform 300ms ease';
+
+      const steps = [
+        { type:'user', text:'मैं सिलाई का काम करता हूँ, 2 लाख चाहिए' },
+        { type:'typing' },
+        { type:'bot', text:'समझ गया! आपके लक्ष्य के लिए PMEGP सबसे उपयुक्त है 👇' },
+        { type:'scheme' }
+      ];
+      function addLine(type, text) {
+        const line = document.createElement('div');
+        line.className = 'chat-line ' + (type==='user' ? 'user' : 'bot');
+        line.style.transition = 'opacity 300ms ease, transform 300ms ease';
+        line.innerHTML = type === 'typing' ? '<div class="bubble"><div class="typing-ind"><span></span><span></span><span></span></div></div>' : `<div class="bubble">${text}</div>`;
+        body.appendChild(line);
+        requestAnimationFrame(() => { line.style.opacity = 1; line.style.transform = 'translateY(0)'; });
+      }
+      function addScheme() {
+        const s = SCHEMES[0];
+        const el = document.createElement('div');
+        el.className = 'mock-scheme';
+        el.innerHTML = `<div class="mock-top"><strong>🏦 ${s.name}</strong><span class="mock-badge">✅ ELIGIBLE</span></div><div class="mock-min">${s.ministry} · ${s.amount}</div>` +
+          `<div class="score-row"><span class="score-label">Eligibility</span><div class="score-bar"><div class="score-fill" data-w="98"></div></div><span class="score-val">98</span></div>` +
+          `<div class="score-row"><span class="score-label">Goal Fit</span><div class="score-bar"><div class="score-fill" data-w="92"></div></div><span class="score-val">92</span></div>` +
+          `<div class="score-row"><span class="score-label">Financial</span><div class="score-bar"><div class="score-fill" data-w="90"></div></div><span class="score-val">90</span></div>` +
+          `<button class="mock-apply">Start Application →</button>`;
+        body.appendChild(el);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          el.classList.add('show');
+          el.querySelectorAll('.score-fill').forEach((f,i) => setTimeout(() => f.style.width = f.dataset.w + '%', i*200));
+        }));
+      }
+      let t = 800;
+      steps.forEach(step => {
+        t += step.type === 'user' ? 600 : step.type === 'typing' ? 1100 : step.type === 'scheme' ? 250 : 600;
+        setTimeout(() => step.type === 'scheme' ? addScheme() : addLine(step.type, step.text), t);
+      });
+    })();
+
+    /* ═══════════ DUPLICATE MARQUEES for seamless loop ═══════════ */
+    function dupLoop(id) {
+      const track = document.getElementById(id);
+      if (!track) return;
+      track.innerHTML += track.innerHTML;
+    }
+    dupLoop('marqueeTrack'); dupLoop('trustTrack');
+
+    /* ═══════════ STICKY HEADER ═══════════ */
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 30), { passive:true });
+
+    /* ═══════════ SCROLL REVEAL ═══════════ */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ═══════════ COUNT-UP ═══════════ */
+    const statIO = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target, target = +el.dataset.count, suffix = el.dataset.suffix || '';
+        let cur = 0; const step = Math.max(1, Math.round(target/40));
+        const timer = setInterval(() => {
+          cur += step;
+          if (cur >= target) { cur = target; clearInterval(timer); }
+          el.textContent = cur + (cur === target ? suffix : '');
+        }, 24);
+        statIO.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.counter').forEach(el => statIO.observe(el));
+
+    /* ═══════════ FAQ ═══════════ */
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement, ans = item.querySelector('.faq-a');
+        const open = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(o => { o.classList.remove('open'); o.querySelector('.faq-a').style.maxHeight = '0px'; });
+        if (!open) { item.classList.add('open'); ans.style.maxHeight = ans.scrollHeight + 'px'; }
+      });
+    });
+
+    /* ═══════════ MOBILE MENU ═══════════ */
+    document.getElementById('mobileBtn').addEventListener('click', () => document.getElementById('navLinks').classList.toggle('open'));
+
+    /* ═══════════ i18N ═══════════ */
+    const I18N = {
+      'nav.how':{hi:'यह कैसे काम करता है',en:'How It Works'},'nav.components':{hi:'कंपोनेंट्स',en:'Components'},'nav.schemes':{hi:'योजनाएँ',en:'Schemes'},'nav.why':{hi:'क्यों Sahayak',en:'Why Sahayak'},'nav.faq':{hi:'सवाल-जवाब',en:'FAQ'},'cta.getStarted':{hi:'शुरू करें',en:'Get Started'},
+      'hero.title':{hi:'अपना सपना बताइए,<br/><span class="lit">सही योजना</span> पाइए',en:'Tell Your Goal,<br/><span class="lit">Find Your</span> Scheme'},
+      'hero.sub':{hi:'हमें बताइए आप क्या करना चाहते हैं, और हम आपके व्यवसाय के लिए सही योजनाएँ ढूंढेंगे। कोई लंबा फॉर्म नहीं — बस अपना लक्ष्य बताइए।',en:'Tell us what you want to achieve, and we\'ll match you with the right schemes. No long forms — just speak your goal in Hindi or English.'},
+      'hero.hint':{hi:'हिंदी या English — दोनों समझते हैं',en:'Try in Hindi or English — we understand both'},
+      'hero.q1':{hi:'💰 Funding',en:'💰 Funding'},'hero.q2':{hi:'🏭 Equipment',en:'🏭 Equipment'},'hero.q3':{hi:'🚀 Start Up',en:'🚀 Start Up'},'hero.q4':{hi:'📚 Skills',en:'📚 Skills'},
+      'mock.name':{hi:'Sahayak सहायक',en:'Sahayak Assistant'},'mock.status':{hi:'ऑनलाइन · बताइए आप क्या चाहते हैं',en:'Online · What would you like?'},'mock.greeting':{hi:'नमस्ते! 🙏 बताइए आप क्या करना चाहते हैं?',en:'Hello! 🙏 Tell me what you want to achieve?'},
+      'how.label':{hi:'यह कैसे काम करता है',en:'How It Works'},
+      'how.title':{hi:'अपनी सही योजना खोजने के 3 आसान कदम',en:'Three simple steps to find your perfect scheme'},
+      'how.s1.title':{hi:'अपना लक्ष्य बताइए',en:'Tell Your Goal'},'how.s1.desc':{hi:'अपने व्यवसाय का लक्ष्य अपने शब्दों में लिखें या बोलें — हिंदी या अंग्रेज़ी।',en:'Type or speak about your business goal in your own words — Hindi or English.'},
+      'how.s2.title':{hi:'योजना से मिलान',en:'Get Matched'},'how.s2.desc':{hi:'हमारा AI 15+ सरकारी योजनाओं से आपकी प्रोफाइल मिलाता है — बिना अनुमान के।',en:'Our AI checks your profile against 15+ verified schemes — no guessing.'},
+      'how.s3.title':{hi:'आत्मविश्वास से आवेदन करें',en:'Apply with Confidence'},'how.s3.desc':{hi:'शीर्ष योजनाएँ, कारण, आवश्यक दस्तावेज़ और सीधा आवेदन लिंक देखें।',en:'See your top schemes ranked, reasons, docs, and a direct apply link.'},
+      'stats.schemes':{hi:'सत्यापित योजनाएँ',en:'Verified Schemes'},'stats.accuracy':{hi:'मिलान सटीकता',en:'Accuracy'},'stats.time':{hi:'कम खोज समय',en:'Less Search'},'stats.free':{hi:'सभी के लिए मुफ़्त',en:'100% Free'},
+      'schemes.label':{hi:'प्रमुख योजनाएँ',en:'Featured Schemes'},'schemes.title':{hi:'आपके लिए सरकारी योजनाएँ',en:'Government schemes tailored for you'},'schemes.desc':{hi:'हाशिये के उद्यमियों के लिए सत्यापित योजनाएँ।',en:'Verified schemes curated for marginalized entrepreneurs.'},
+      'why.label':{hi:'क्यों Sahayak',en:'Why Sahayak'},'why.title':{hi:'सिर्फ़ एक और योजना खोज नहीं',en:'Not just another scheme search'},'why.desc':{hi:'हम खोज से आगे जाते हैं — आपका लक्ष्य समझते हैं, बताते हैं क्यों सही है, और आवेदन के लिए तैयार करते हैं।',en:'We go beyond discovery — we understand, explain, and prepare you to apply.'},
+      'why.c1.t':{hi:'व्यवसाय लक्ष्य समझ',en:'Goal Understanding'},'why.c1.d':{hi:'हम प्राकृतिक भाषा से संरचित जानकारी निकालते हैं।',en:'We extract structured requirements from natural language.'},
+      'why.c2.t':{hi:'निश्चित पात्रता',en:'Deterministic Eligibility'},'why.c2.d':{hi:'पात्रता नियमों से तय, AI अंदाज़े से नहीं।',en:'Eligibility by verified rules, not guessing.'},
+      'why.c3.t':{hi:'समझाने वाली सिफारिशें',en:'Explainable Recommendations'},'why.c3.d':{hi:'स्रोत के साथ बताते हैं क्यों सही है।',en:'Why it fits, with official sources.'},
+      'why.c4.t':{hi:'दस्तावेज़ तैयारी',en:'Document Readiness'},'why.c4.d':{hi:'आवेदन से पहले देखें कौन से दस्तावेज़ चाहिए।',en:'Know which documents you need up front.'},
+      'why.c5.t':{hi:'हिंदी और अंग्रेज़ी',en:'Hindi & English'},'why.c5.d':{hi:'दोनों भाषाओं में बोलें या लिखें।',en:'Speak or type in both languages.'},
+      'why.c6.t':{hi:'डेटा गोपनीयता',en:'Data Privacy'},'why.c6.d':{hi:'न्यूनतम, एन्क्रिप्टेड, कभी साझा नहीं।',en:'Minimal, encrypted, never shared.'},
+      'testi.label':{hi:'सफलता की कहानियाँ',en:'Success Stories'},'testi.title':{hi:'असली उद्यमी, असली सहारा',en:'Real entrepreneurs, real support'},
+      'testi.t1':{hi:'Sahayak ने 3 मिनट में बताया कौन सी योजना पात्रता है और कौन से दस्तावेज़ चाहिए।',en:'Sahayak told me in 3 minutes which scheme I qualify for and which documents I need.'},
+      'testi.t2':{hi:'हिंदी इंटरफ़ेस और चरण-दर-चरण सूची ने सब बदल दिया।',en:'The Hindi interface and step-by-step checklist changed everything.'},
+      'testi.t3':{hi:'स्पष्टीकरण ने समझाया कि मैं क्यों पात्र हूँ। बैंक में आत्मविश्वास से बात की।',en:'The explanations made me understand WHY I qualify. I talked to the bank with confidence.'},
+      'testi.t1n':{hi:'राम कुमार',en:'Ram Kumar'},'testi.t1r':{hi:'सिलाई उद्यमी, बिहार',en:'Tailor, Bihar'},
+      'testi.t2n':{hi:'प्रिया शर्मा',en:'Priya Sharma'},'testi.t2r':{hi:'कारीगर, राजस्थान',en:'Artisan, Rajasthan'},
+      'testi.t3n':{hi:'आरिफ मोहम्मद',en:'Arif Mohammad'},'testi.t3r':{hi:'दुकान मालिक, UP',en:'Shop Owner, UP'},
+      'faq.label':{hi:'सवाल-जवाब',en:'FAQ'},'faq.title':{hi:'अक्सर पूछे जाने वाले प्रश्न',en:'Frequently asked questions'},
+      'faq.q1':{hi:'क्या Sahayak सच में मुफ़्त है?',en:'Is Sahayak really free?'},'faq.a1':{hi:'हाँ, सभी के लिए पूरी तरह मुफ़्त। कोई छिपा शुल्क नहीं।',en:'Yes, completely free for all users. No hidden charges, ever.'},
+      'faq.q2':{hi:'मेरा डेटा कैसे सुरक्षित है?',en:'How is my data protected?'},'faq.a2':{hi:'केवल न्यूनतम जानकारी, एन्क्रिप्टेड, कभी साझा नहीं।',en:'Only minimal info, encrypted, never shared.'},
+      'faq.q3':{hi:'क्या मुझे कंप्यूटर कौशल चाहिए?',en:'Do I need computer skills?'},'faq.a3':{hi:'नहीं। हिंदी या अंग्रेज़ी में बात करें। वॉइस जल्द आ रही है।',en:'No. Just talk in Hindi or English. Voice is coming soon.'},
+      'faq.q4':{hi:'कौन से राज्य शामिल हैं?',en:'Which states are covered?'},'faq.a4':{hi:'केंद्रीय योजनाएँ पूरे भारत में। राज्य योजनाएँ जोड़ी जा रही हैं।',en:'Central schemes cover all of India. State schemes being added.'},
+      'cta.title':{hi:'अपने व्यवसाय के लिए सही योजना खोजने को तैयार?',en:'Ready to find the right scheme for your business?'},
+      'cta.sub':{hi:'हज़ारों उद्यमी सही सरकारी सहायता से अपने सपने साकार कर रहे हैं।',en:'Join thousands turning their goals into reality with the right support.'},
+      'cta.primary':{hi:'अभी शुरू करें — मुफ़्त है',en:'Start Now — It\'s Free'},'cta.secondary':{hi:'कैसे काम करता है सीखें',en:'Learn How It Works'},
+      'footer.tagline':{hi:'हर भारतीय उद्यमी के लिए AI-आधारित योजना मिलान।',en:'AI-Driven Scheme Matching for Every Indian Entrepreneur.'}
+    };
+    const PH = { hi:'मैं सिलाई का छोटा काम करता हूँ, 2 लाख चाहिए...', en:'I run a small tailoring business, need ₹2L for machines...' };
+
+    function setLang(lang) {
+      document.getElementById('langToggle').dataset.lang = lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(lang==='hi'?'हिन्दी':'EN')));
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (I18N[key] && I18N[key][lang]) el.innerHTML = I18N[key][lang];
+      });
+      document.getElementById('heroInput').placeholder = PH[lang];
+    }
+
+    /* ═══════════ PARTICLES BACKGROUND (moving canvas) ═══════════ */
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const canvas = document.getElementById('particles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W, H, parts = [], raf;
+      const colors = ['#8B5E3C', '#C08552', '#D9A062', '#B08D57', '#7FA650', '#A9744F'];
+      function resize() {
+        W = canvas.width = Math.min(window.innerWidth, 1600);
+        H = canvas.height = window.innerHeight;
+      }
+      function spawn() {
+        const n = Math.max(26, Math.min(56, Math.round(W / 28)));
+        parts = Array.from({ length: n }, () => ({
+          x: Math.random() * W, y: Math.random() * H,
+          r: 1.4 + Math.random() * 3, vy: 0.16 + Math.random() * 0.5,
+          vx: (Math.random() - 0.5) * 0.3, a: Math.random() * Math.PI * 2,
+          color: colors[(Math.random() * colors.length) | 0]
+        }));
+      }
+      function tick() {
+        ctx.clearRect(0, 0, W, H);
+        parts.forEach(p => {
+          p.a += 0.008; p.y -= p.vy; p.x += p.vx + Math.sin(p.a) * 0.25;
+          if (p.y < -8) { p.y = H + 8; p.x = Math.random() * W; }
+          ctx.globalAlpha = 0.5 + p.r * 0.12;
+          ctx.fillStyle = p.color;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        });
+        raf = requestAnimationFrame(tick);
+      }
+      window.addEventListener('resize', () => { resize(); spawn(); });
+      resize(); spawn(); tick();
+    })();
+
+    /* ═══════════ DUPLICATE PEOPLE MARQUEE for seamless loop ═══════════ */
+    (function () {
+      const strip = document.getElementById('peopleMarquee');
+      if (!strip) return;
+      strip.innerHTML += strip.innerHTML;
+    })();
+  </script>
+</body>
+</html>

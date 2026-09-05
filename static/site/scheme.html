@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — Scheme Details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+</head>
+<body class="scheme-page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header class="header" id="pageHeader"></header>
+  <div class="inner-shell">
+    <div class="page-wrap">
+      <div class="page-head">
+        <div class="breadcrumb"><a href="results.html">Results</a> <span>›</span> <span id="crumbName">Scheme</span></div>
+        <h1 id="schemeTitle"></h1>
+      </div>
+
+      <div class="scheme-hero reveal visible">
+        <span class="badge-pill" id="schStatus" style="margin-bottom:12px;">ELIGIBLE</span>
+        <div class="sh-title" id="schFull"></div>
+        <div class="sh-meta" id="schMeta"></div>
+      </div>
+
+      <div class="scheme-detail-grid">
+        <nav class="sticky-nav panel" id="detailNav">
+          <a href="#about" class="active">About</a>
+          <a href="#eligibility">Your Eligibility</a>
+          <a href="#documents">Documents</a>
+          <a href="#howto">How to Apply</a>
+          <a href="#why">Why This Scheme</a>
+          <a href="#related">Related Schemes</a>
+        </nav>
+
+        <div>
+          <!-- ABOUT -->
+          <section class="detail-section panel" id="about">
+            <h2>📄 About This Scheme</h2>
+            <p id="schDesc"></p>
+            <p><strong>Benefit:</strong> <span id="schBenefit"></span></p>
+          </section>
+
+          <!-- ELIGIBILITY -->
+          <section class="detail-section panel" id="eligibility">
+            <h2>✅ Your Eligibility</h2>
+            <ul class="elg-list" id="elgList"></ul>
+          </section>
+
+          <!-- DOCUMENTS -->
+          <section class="detail-section panel" id="documents">
+            <h2>📋 Required Documents</h2>
+            <ul class="doc-list-ui" id="docList"></ul>
+            <div class="action-row" style="margin-top:16px;">
+              <a href="documents.html" class="btn btn-accent btn-sm">Upload Documents →</a>
+            </div>
+          </section>
+
+          <!-- HOW TO APPLY -->
+          <section class="detail-section panel" id="howto">
+            <h2>🛠️ How to Apply</h2>
+            <ol class="how-list" id="howList"></ol>
+          </section>
+
+          <!-- WHY -->
+          <section class="detail-section panel" id="why">
+            <h2>💡 Why This Scheme Fits You</h2>
+            <div class="why-box" style="background:linear-gradient(160deg,#FBF6EF,#F7EAD8);">
+              <p id="schWhy"></p>
+              <div class="source">Source: <span id="schSource"></span></div>
+            </div>
+          </section>
+
+          <!-- RELATED -->
+          <section class="detail-section panel" id="related">
+            <h2>🔗 Related Schemes</h2>
+            <div class="related-grid" id="relatedGrid"></div>
+          </section>
+
+          <div class="apply-bar">
+            <a href="documents.html" class="btn btn-accent" style="font-size:16px;padding:14px 30px;">Start Application →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-config.js"></script>
+  <script src="scheme-catalog.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function escHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[c]));
+    }
+    function getParam(name) {
+      const q = new URLSearchParams(window.location.search);
+      return q.get(name);
+    }
+
+    /* Turn a plain-text document into a small set of labelled sections so the
+       detail page is scannable. Lines starting with "Purpose", "Who it is
+       for", "Loan amount", "What it provides", etc. become headings. */
+    function buildSections(text) {
+      const lines = String(text || '').split('\n').map(l => l.trim()).filter(Boolean);
+      const sectionOrder = [
+        'purpose', 'who it is for', 'loan amount', 'what it provides',
+        'what it does', 'coverage', 'guarantee', 'equity support',
+        'key condition', 'key terms', 'struct', 'other condition', 'how it differs',
+        'implementing', 'apply', 'scope', 'documents', 'notes', 'how it fits',
+      ];
+      const sections = [];
+      let current = null;
+      lines.forEach(line => {
+        const m = line.match(/^[-*•]?\s*(Purpose|Who it is for|Loan amount|Loan details|What it provides|What it does|Coverage|Guarantee|Equity support|Key condition|Key terms|Structure|Other conditions|Education requirement|How it differs|Implementing|Implementing body|Apply through|Where to apply|Scope|Documents|Documents typically required|Note|How it fits|Eligibility note)\s*[:—]?\s*(.*)$/i);
+        if (m && m[2]) {
+          sections.push({ head: m[1], body: m[2] });
+          current = sections[sections.length - 1];
+        } else {
+          if (current) current.body += ' ' + line; else sections.push({ head: 'About', body: line });
+        }
+      });
+      return sections;
+    }
+
+    async function renderScheme() {
+      const src = getParam('src');
+      const meta = window.SCHEME_CATALOG;
+
+      // Resolve which scheme to show: prefer ?src (chunk prefix from Results),
+      // otherwise fall back to ?id (legacy slug) or the first catalog entry.
+      const key = (src && meta[src]) ? src : resolveSchemeKey(getParam('id') || src);
+      const base = key || Object.keys(meta)[0];
+      const s = meta[base];
+
+      await loadSchemeDocs();
+      const text = window.SCHEME_DOCS[base] || s.fullName;
+      const sections = buildSections(text);
+
+      document.title = 'Sahayak — ' + s.name;
+      document.getElementById('crumbName').textContent = s.name;
+      document.getElementById('schemeTitle').textContent = s.name + ' — Scheme Details';
+      document.getElementById('schFull').textContent = s.icon + ' ' + s.fullName;
+      document.getElementById('schStatus').textContent = '● MATCHED';
+      document.getElementById('schStatus').classList.add('eligible');
+
+      document.getElementById('schMeta').innerHTML =
+        `<span>🏛️ ${escHtml(s.ministry)}</span><span>👥 ${escHtml(s.category)}</span><span>💼 ${escHtml(s.type)}</span><span>💰 ${escHtml(s.amount)}</span><span>🔗 ${escHtml(s.portal)}</span>`;
+
+      // About: full official explainer from the indexed document.
+      document.getElementById('schDesc').textContent = text;
+      document.getElementById('schBenefit').textContent = s.amount + ' — ' + s.type;
+
+      // Eligibility: this page only reflects the documented target group of the
+      // scheme (it does NOT certify your personal eligibility).
+      document.getElementById('elgList').innerHTML = [
+        { rule: 'Target group (documented): ' + s.category, st: 'ok' },
+        { rule: 'Reference years: indexed from the official source document', st: 'ok' },
+        { rule: 'Personal eligibility verified by the bank / implementing department', st: 'pend' },
+      ].map(e => {
+        const icon = e.st === 'ok' ? '✔' : e.st === 'miss' ? '✖' : '?';
+        return `<li class="${e.st}"><span class="st">${icon}</span>${e.rule}</li>`;
+      }).join('');
+
+      // Documents / how-to: general guidance, sourced from the detail sections.
+      const docsSection = sections.find(x => /document/i.test(x.head));
+      document.getElementById('docList').innerHTML =
+        (docsSection ? [docsSection.body] : ['Identity proof, caste/category certificate (if applicable)', 'Detailed / brief project report', 'Bank account details', 'Business registration (if any)'])
+        .map(d => `<li>☐ ${escHtml(d)}<span class="st badge-pill noteligible">Missing</span></li>`).join('');
+
+      const applySection = sections.find(x => /appl|implement/i.test(x.head));
+      const applySteps = applySection
+        ? [applySection.body].map(t => t.replace(/^([A-Z][^:]*):\s*/, '$1 — ')).join(' ').split('. ').filter(Boolean).slice(0, 5)
+        : [s.portal.replace(/^https?:\/\//,'') + ' (official portal)', 'Prepare the required documents', 'Visit the nearest bank / department / CSC', 'Submit application and track status'];
+      document.getElementById('howList').innerHTML = applySteps.map(st => `<li>${escHtml(st)}</li>`).join('');
+
+      // Why this scheme: pull the "how it differs / purpose" explainer.
+      const why = sections.find(x => /differ|purpose|who it is for/i.test(x.head));
+      document.getElementById('schWhy').textContent =
+        (why ? why.head + ': ' + why.body : excerptFor(text)) || 'See the official document for details.';
+      document.getElementById('schSource').textContent = s.portal;
+
+      // Related schemes: the rest of the catalog.
+      const others = Object.keys(meta).filter(k => k !== base);
+      document.getElementById('relatedGrid').innerHTML = others.map(k => {
+        const r = meta[k];
+        return `<a href="scheme.html?src=${encodeURIComponent(k)}" class="related-card"><div class="ri">${r.icon}</div><div class="rn">${r.name}</div><div class="rm">${r.amount}</div></a>`;
+      }).join('');
+    }
+
+    function excerptFor(text){ const clean=String(text||'').replace(/\s+/g,' ').trim(); return clean.length>260?clean.slice(0,260)+'…':clean; }
+
+    // scroll-spy nav
+    function initScrollSpy() {
+      const links = document.querySelectorAll('#detailNav a');
+      const secs = document.querySelectorAll('.detail-section');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (!en.isIntersecting) return;
+          links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id));
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      secs.forEach(s => io.observe(s));
+    }
+
+    renderScheme();
+    initScrollSpy();
+    buildHeader('Results');
+    buildFooter();
+    initMobileMenu();
+  </script>
+</body>
+</html>

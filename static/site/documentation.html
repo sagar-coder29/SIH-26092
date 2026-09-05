@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <style>
+    .doc-section { margin-bottom: 20px; }
+    .doc-section h3 { margin: 0 0 8px; font-size: 16px; color: var(--heading); }
+    .doc-section ul, .doc-section ol { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.9; color: var(--body); }
+    .doc-chip { display:inline-block; background:var(--bg); border:1px solid var(--border); border-radius:20px; padding:4px 12px; font-size:12.5px; margin:2px 4px 2px 0; color:var(--muted); }
+  </style>
+</head>
+<body class="doc-page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header class="header" id="pageHeader"></header>
+  <div class="inner-shell">
+    <div class="page-wrap">
+      <div class="page-head">
+        <div class="breadcrumb"><a href="results.html">Results</a> <span>›</span> <span>Documentation</span></div>
+        <h1>Your Scheme Documentation</h1>
+        <p class="sub">An AI-generated summary of your goal, the documents you may need, and your next steps.</p>
+      </div>
+
+      <div class="panel" id="docEmpty" style="display:none;padding:30px;text-align:center;color:var(--muted);">
+        <div style="font-size:32px;margin-bottom:10px;">📄</div>
+        No documentation yet. Complete a chat and tap <b>“Finish — Get My Results”</b> to auto-generate it.
+        <div style="margin-top:16px;"><a href="chat.html" class="btn btn-accent">Start a chat →</a></div>
+      </div>
+
+      <div id="docBody"></div>
+
+      <div class="action-row" style="margin-top:26px;justify-content:space-between;">
+        <a href="results.html" class="btn btn-ghost btn-sm">← Back to Results</a>
+        <button class="btn btn-accent btn-sm" onclick="window.print()">Print / Save as PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function esc(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    function render() {
+      let saved = null;
+      try { saved = JSON.parse(window.localStorage.getItem('sa_generated')); } catch (e) {}
+      const empty = document.getElementById('docEmpty');
+      const body = document.getElementById('docBody');
+      if (!saved || !saved.generated) { empty.style.display='block'; body.innerHTML=''; return; }
+      empty.style.display='none';
+
+      const g = saved.generated;
+      const dash = g.dashboard || {};
+      const meta = window.SCHEME_CATALOG || {};
+      const profile = saved.profile || {};
+      const profileChips = Object.keys(profile)
+        .map(k => `<span class="doc-chip"><b>${esc(k)}:</b> ${esc(profile[k])}</span>`).join(' ');
+
+      const schemes = (g.matched_schemes || []).map(s => {
+        const base = (s.citations && s.citations[0]) ? String(s.citations[0]).split('#')[0] : '';
+        const cat = meta[base] || {};
+        const cite = (s.citations || []).map(c => `<span class="qr-chip" style="cursor:default;margin:0 3px;">${esc(c)}</span>`).join('');
+        return `
+          <div class="hist-item">
+            <h3 style="margin:0 0 6px;font-size:15px;color:var(--heading);">${cat.icon||'🏷️'} ${esc(s.name)}</h3>
+            <p style="margin:0 0 6px;font-size:14px;line-height:1.7;color:var(--body);">${esc(s.why)}</p>
+            ${cite ? `<div style="font-size:12.5px;color:var(--muted);">Sources: ${cite}</div>` : ''}
+            ${cat.portal ? `<div style="font-size:12.5px;color:var(--muted);margin-top:4px;">Portal: <a href="${esc(cat.portal)}" target="_blank" rel="noopener">${esc(cat.portal)}</a></div>` : ''}
+          </div>`;
+      }).join('');
+
+      body.innerHTML = `
+        <div class="panel doc-section">
+          <h3>🎯 Business Goal</h3>
+          <p style="margin:0;font-size:14.5px;line-height:1.7;color:var(--body);">${esc(dash.goal || '—')}</p>
+          ${profileChips ? `<div style="margin-top:10px;">${profileChips}</div>` : ''}
+        </div>
+
+        <div class="panel doc-section">
+          <h3>📋 Recommendation Summary</h3>
+          <p style="margin:0;font-size:14.5px;line-height:1.7;color:var(--body);">${esc(g.recommendation_summary || '—')}</p>
+        </div>
+
+        <div class="panel doc-section">
+          <h3>🏆 Top Match: ${esc(g.top_match || '—')}</h3>
+        </div>
+
+        <div class="panel doc-section">
+          <h3>🏦 Matched Schemes</h3>
+          ${schemes || '<p style="color:var(--muted);margin:0;">No matched schemes found.</p>'}
+        </div>
+
+        <div class="panel doc-section">
+          <h3>📄 Documents You May Need</h3>
+          ${g.document_checklist && g.document_checklist.length
+            ? '<ul>' + g.document_checklist.map(d => `<li>${esc(d)}</li>`).join('') + '</ul>'
+            : '<p style="color:var(--muted);margin:0;">None specified.</p>'}
+        </div>
+
+        <div class="panel doc-section">
+          <h3>✅ Next Steps</h3>
+          ${g.next_steps && g.next_steps.length
+            ? '<ol>' + g.next_steps.map(s => `<li>${esc(s)}</li>`).join('') + '</ol>'
+            : '<p style="color:var(--muted);margin:0;">No steps provided.</p>'}
+        </div>
+
+        <div class="panel" style="border-left:3px solid var(--secondary);padding:16px 18px;">
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.6;">
+            ⚖️ <b>Disclaimer:</b> This documentation is an AI-generated <b>explainer</b> built from official
+            scheme documents. It does not decide final <b>eligibility</b> — please confirm with the
+            concerned bank/department before applying.
+          </div>
+        </div>`;
+    }
+
+    render();
+    buildHeader('Documents');
+    buildFooter();
+    initMobileMenu();
+  </script>
+</body>
+</html>

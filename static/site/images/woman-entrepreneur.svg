@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#D9F99D"/>
+      <stop offset="100%" stop-color="#A5B4FC"/>
+    </radialGradient>
+    <linearGradient id="sari2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0EA5E9"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+  <circle cx="110" cy="105" r="100" fill="url(#bg)"/>
+  <circle cx="110" cy="105" r="100" fill="none" stroke="#FFFFFF" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="7 9"/>
+  <!-- laptop / phone -->
+  <g transform="translate(112 118)">
+    <rect x="-22" y="-8" width="52" height="34" rx="5" fill="#1E293B"/>
+    <rect x="-15" y="-2" width="38" height="22" rx="3" fill="#0EA5E9"/>
+    <rect x="-15" y="-2" width="24" height="22" rx="3" fill="#38BDF8"/>
+    <path d="M-14 26 L14 26 M-8 28 L8 28" stroke="#94A3B8" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="4" cy="9" r="6" fill="#FFFFFF" opacity="0.85"/>
+    <path d="M-2 6 q4 -6 8 0 q-4 -4 -8 0" fill="none" stroke="#EC4899" stroke-width="1.5"/>
+  </g>
+  <!-- head -->
+  <circle cx="90" cy="72" r="28" fill="#C68642"/>
+  <!-- hair -->
+  <path d="M62 74 Q58 38 90 36 Q122 38 118 74 L122 110 Q122 124 118 128 L118 104 Q116 92 114 82 L66 82 Q64 92 62 104 L62 128 Q58 124 58 110 Z" fill="#2C1810"/>
+  <path d="M64 52 Q70 38 90 36 Q110 38 116 52 Q90 46 64 52 Z" fill="#2C1810"/>
+  <!-- happy eyes -->
+  <path d="M76 70 Q81 65 86 70" stroke="#2C1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M94 70 Q99 65 104 70" stroke="#2C1810" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- smile -->
+  <path d="M82 84 Q90 94 98 84" stroke="#A11D2E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- blush -->
+  <circle cx="74" cy="78" r="4.5" fill="#F8BBD0" opacity="0.8"/>
+  <circle cx="106" cy="78" r="4.5" fill="#F8BBD0" opacity="0.8"/>
+  <!-- body -->
+  <path d="M66 102 Q62 150 64 190 L116 190 Q118 150 114 102 L100 98 Q90 106 80 98 Z" fill="url(#sari2)"/>
+  <path d="M88 98 L92 190 M112 104 L96 190 M68 104 L84 190" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="2.5" fill="none"/>
+  <!-- blouse -->
+  <rect x="78" y="96" width="24" height="18" rx="5" fill="#818CF8"/>
+  <!-- arms to laptop -->
+  <path d="M70 114 Q70 118 86 118" stroke="#C68642" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <path d="M110 114 Q110 118 100 118" stroke="#C68642" stroke-width="11" stroke-linecap="round" fill="none"/>
+  <circle cx="86" cy="118" r="8" fill="#C68642"/>
+  <circle cx="100" cy="118" r="8" fill="#C68642"/>
+  <!-- growth/up arrow -->
+  <path d="M40 140 L64 116 L80 122 L96 100" stroke="#059669" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M82 100 L96 100 L96 112" stroke="#059669" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>

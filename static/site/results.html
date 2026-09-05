@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — Results</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+</head>
+<body class="results-page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header class="header" id="pageHeader"></header>
+  <div class="inner-shell">
+    <div class="page-wrap">
+      <div class="page-head">
+        <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Results</span></div>
+        <h1>Your matched schemes</h1>
+        <p class="sub">We found the best-fit government schemes for your business goal, ranked and explained.</p>
+      </div>
+
+      <div class="results-summary reveal visible">
+        <div class="count" id="resultCount">Loading schemes…</div>
+        <div class="action-row">
+          <a href="chat.html" class="btn btn-outline btn-sm">← Back to Chat</a>
+          <button class="btn btn-accent btn-sm" onclick="alert('Summary PDF (available in the full version)')">Download Summary PDF</button>
+        </div>
+      </div>
+
+      <div class="result-note reveal visible" id="resultNote" style="display:none;
+        padding:12px 16px;background:#FBF6EF;border:1px solid var(--border);border-radius:12px;
+        font-size:13px;color:var(--muted);margin-bottom:18px;">
+      </div>
+
+      <div id="resultsList">
+        <div class="panel" style="padding:26px;text-align:center;color:var(--muted);">
+          <div style="font-size:30px;margin-bottom:8px;">⏳</div>
+          Matching your goal against live scheme documents…
+        </div>
+      </div>
+
+      <div class="action-row" style="margin-top:10px;">
+        <a href="chat.html" class="btn btn-ghost btn-sm">← Back to Chat</a>
+        <a href="documentation.html" class="btn btn-outline btn-sm">My Documentation</a>
+        <a href="dashboard.html" class="btn btn-accent btn-sm">Go to Dashboard →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="site-config.js"></script>
+  <script src="scheme-catalog.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function escHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[c]));
+    }
+
+    function buildProfilePayload() {
+      const p = (window.Sahayak.getProfile && window.Sahayak.getProfile()) || {};
+      const payload = {};
+      if (p.category) payload.category = p.category;
+      if (p.stage) payload.business_stage = p.stage;
+      if (p.business) payload.business_type = p.business;
+      if (p.amount) payload.loan_amount = p.amount;
+      if (p.location) payload.location = p.location;
+      return Object.keys(payload).length ? payload : null;
+    }
+
+    function loadGenerated() {
+      try { return JSON.parse(window.localStorage.getItem('sa_generated')); } catch (e) { return null; }
+    }
+
+    async function getAnswer() {
+      // Re-run the RAG explainer on the last query so we have a fresh, cited
+      // answer to feed auto-generation (only when none is saved yet).
+      const lastQuery = (() => { try { return window.localStorage.getItem('sa_last_query'); } catch (e) { return ''; } })();
+      if (!lastQuery) return null;
+      const user = (window.Sahayak.currentUser && window.Sahayak.currentUser()) || null;
+      const res = await fetch('/answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: lastQuery,
+          profile: buildProfilePayload(),
+          user_id: user ? user.id : null,
+          user_email: user ? user.email : null,
+          top_k: 8,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.text) return null;
+      return { query: lastQuery, answer: data.text, citations: data.citations || [] };
+    }
+
+    async function generateFor(exchange) {
+      const user = (window.Sahayak.currentUser && window.Sahayak.currentUser()) || null;
+      const body = {
+        query: exchange.query,
+        answer: exchange.answer,
+        citations: exchange.citations,
+        profile: buildProfilePayload(),
+        user_id: user ? user.id : null,
+        user_email: user ? user.email : null,
+        full_name: (user && user.user_metadata && user.user_metadata.full_name) || null,
+      };
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Generation failed');
+      try {
+        window.localStorage.setItem('sa_generated', JSON.stringify(data));
+        window.localStorage.setItem('sa_session_generated', '1');
+      } catch (e) {}
+      return data;
+    }
+
+    function renderEmpty() {
+      const list = document.getElementById('resultsList');
+      list.innerHTML = `
+        <div class="panel" style="padding:34px;text-align:center;color:var(--muted);">
+          <div style="font-size:34px;margin-bottom:10px;">💬</div>
+          <div style="font-size:17px;font-weight:700;color:var(--heading);margin-bottom:6px;">No results yet</div>
+          <p style="font-size:14px;line-height:1.6;max-width:460px;margin:0 auto 18px;">
+            Your personalized results are created automatically after you finish a chat.
+            Tell the assistant your business goal, then tap <b>“Finish — Get My Results”</b>.
+          </p>
+          <a href="chat.html" class="btn btn-accent">Start a chat →</a>
+        </div>
+      `;
+      document.getElementById('resultCount').innerHTML = 'Waiting for a completed chat';
+    }
+
+    function renderFrom(generated) {
+      const g = (generated && generated.generated) || {};
+      const meta = window.SCHEME_CATALOG || {};
+      const list = document.getElementById('resultsList');
+      const note = document.getElementById('resultNote');
+
+      note.style.display = 'block';
+      note.innerHTML = '💡 <b>AI Auto-Generated:</b> This is an <b>explainer</b> built from official scheme documents (via Groq). Final <b>eligibility</b> is confirmed by the bank/department — this page does not decide eligibility on its own.';
+
+      const schemes = g.matched_schemes || [];
+      if (!schemes.length) { renderEmpty(); return; }
+
+      document.getElementById('resultCount').innerHTML =
+        `We found <span>${schemes.length} relevant</span> scheme${schemes.length===1?'':'s'} for your business`;
+
+      const excerpt = (t, n) => { const c = String(t||'').replace(/\s+/g,' ').trim(); return c.length>n?c.slice(0,n)+'…':c; };
+
+      let summary = '';
+      if (g.recommendation_summary) {
+        summary = `
+          <div class="panel" style="padding:18px 20px;margin-bottom:18px;">
+            <div class="why-head" style="margin-bottom:6px;">🎯 Recommendation Summary</div>
+            <p style="font-size:14.5px;line-height:1.7;color:var(--body);margin:0;">${escHtml(g.recommendation_summary)}</p>
+          </div>`;
+      }
+
+      list.innerHTML = summary + schemes.map((s, i) => {
+        const cite = (s.citations && s.citations[0]) ? String(s.citations[0]).split('#')[0] : '';
+        const cat = meta[cite] || {};
+        const portal = cat.portal || '';
+        const sourceChips = (s.citations || []).map(c => `<span class="qr-chip" style="cursor:default;margin:0 3px 0 0;">${escHtml(c)}</span>`).join('');
+        return `
+          <div class="result-card reveal" id="rc-${i}">
+            <div class="rc-top">
+              <div class="rank-badge">${i+1}</div>
+              <div class="rc-name">
+                <h3>${cat.icon || '🏷️'} ${escHtml(s.name)}</h3>
+                ${cat.ministry ? `<div class="rc-ministry">${escHtml(cat.ministry)} · ${escHtml(cat.amount||'')}</div>` : ''}
+              </div>
+              <div class="rc-score"><span class="badge-pill eligible">MATCHED</span></div>
+            </div>
+            <div class="rc-break rc-more">
+              <div class="why-box">
+                <div class="why-head">📖 Why this scheme?</div>
+                <p>${escHtml(excerpt(s.why, 320))}</p>
+                ${sourceChips ? `<div style="margin-top:8px;font-size:12px;color:var(--muted);">Sources: ${sourceChips}</div>` : ''}
+                ${portal ? `<div class="source" style="margin-top:8px;">Source: <a href="${escHtml(portal)}" target="_blank" rel="noopener">${escHtml(portal)}</a></div>` : ''}
+              </div>
+              ${cite ? `<div class="rc-actions"><a href="scheme.html?src=${encodeURIComponent(cite)}" class="btn btn-outline btn-sm">View Details</a></div>` : ''}
+            </div>
+          </div>`;
+      }).join('');
+
+      if (g.document_checklist && g.document_checklist.length) {
+        const docs = g.document_checklist.map(d => `<li>${escHtml(d)}</li>`).join('');
+        list.innerHTML += `
+          <div class="panel" style="margin-top:18px;padding:20px;">
+            <div class="why-head" style="margin-bottom:8px;">📄 Documents You May Need</div>
+            <ul style="margin:0;padding-left:20px;font-size:14px;line-height:1.9;color:var(--body);">${docs}</ul>
+          </div>`;
+      }
+      if (g.next_steps && g.next_steps.length) {
+        const steps = g.next_steps.map(s => `<li>${escHtml(s)}</li>`).join('');
+        list.innerHTML += `
+          <div class="panel" style="margin-top:18px;padding:20px;">
+            <div class="why-head" style="margin-bottom:8px;">✅ Next Steps</div>
+            <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.9;color:var(--body);">${steps}</ol>
+          </div>`;
+      }
+      requestAnimationFrame(initReveal);
+    }
+
+    async function renderResults() {
+      // 1) Prefer a saved auto-generated bundle.
+      let saved = loadGenerated();
+      if (saved) { renderFrom(saved); return; }
+
+      // 2) Otherwise rebuild it live from the RAG answer + Groq generation.
+      const list = document.getElementById('resultsList');
+      list.innerHTML = `
+        <div class="panel" style="padding:26px;text-align:center;color:var(--muted);">
+          <div style="font-size:30px;margin-bottom:8px;">⏳</div>
+          Matching your goal against live scheme documents…
+        </div>`;
+      try {
+        const exchange = await getAnswer();
+        if (!exchange) { renderEmpty(); return; }
+        const generated = await generateFor(exchange);
+        renderFrom(generated);
+      } catch (e) {
+        list.innerHTML = `
+          <div class="panel" style="padding:26px;text-align:center;color:var(--muted);">
+            <div style="font-size:30px;margin-bottom:8px;">⚠️</div>
+            Could not generate results: ${escHtml(e.message || 'please try again')}
+          </div>`;
+      }
+    }
+
+    renderResults();
+    buildHeader('Results');
+    buildFooter();
+    initMobileMenu();
+  </script>
+</body>
+</html>
