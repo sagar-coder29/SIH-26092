@@ -31,6 +31,7 @@
       <li><a href="chat.html">Chat</a></li>
       <li><a href="results.html">Results</a></li>
       <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="emi.html">EMI Calculator</a></li>
       <li><a href="documents.html">Documents</a></li>
       <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
     </ul>
@@ -40,6 +41,7 @@
         <button class="lang-btn active" onclick="setLang('hi')">हिन्दी</button>
         <button class="lang-btn" onclick="setLang('en')">EN</button>
       </div>
+      <a href="emi.html" class="btn btn-accent emi-nav-btn" aria-label="EMI Calculator">🏦 EMI</a>
       <a href="chat.html" class="btn btn-accent" style="padding:9px 22px;font-size:13px;" data-i18n="cta.getStarted">Get Started</a>
       <button class="mobile-menu-btn" id="mobileBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
@@ -58,10 +60,11 @@
       <p data-i18n="hero.sub">Tell us what you want to achieve, and we'll match you with the right government schemes. No long forms — just speak your goal in Hindi or English.</p>
 
       <div class="hero-input-wrap">
-        <input class="hero-input" id="heroInput" type="text" placeholder="मैं सिलाई का छोटा काम करता हूँ, 2 लाख चाहिए..." onkeydown="if(event.key==='Enter'){event.preventDefault();location.href='chat.html';}" />
+        <input class="hero-input" id="heroInput" type="text" placeholder="मैं सिलाई का छोटा काम करता हूँ, 2 लाख चाहिए..." onkeydown="if(event.key==='Enter'){event.preventDefault();goChat();}" />
         <button class="icon-btn hero-voice" title="Voice" onclick="alert('Voice input coming soon (Bhashini roadmap)')">🎤</button>
-        <button class="icon-btn hero-send" title="Search" onclick="location.href='chat.html'">→</button>
+        <button class="icon-btn hero-send" title="Search" onclick="goChat()">→</button>
       </div>
+      <script>function goChat(){var q=document.getElementById('heroInput').value.trim();location.href='chat.html'+(q?'?q='+encodeURIComponent(q):'');}</script>
       <p class="hero-hint" data-i18n="hero.hint">हिंदी या English — दोनों समझते हैं</p>
 
       <div class="quick-start">
@@ -249,6 +252,65 @@
       <div class="why-card reveal"><div class="why-icon" style="background:#EEE3D2;color:var(--secondary);">📋</div><h3 data-i18n="why.c4.t">Document Readiness</h3><p data-i18n="why.c4.d">See which documents you have and which you need before applying.</p></div>
       <div class="why-card reveal"><div class="why-icon" style="background:#F7E0D2;color:var(--pink);">🗣️</div><h3 data-i18n="why.c5.t">Hindi & English</h3><p data-i18n="why.c5.d">Speak or type in Hindi or English — built for India's linguistic diversity.</p></div>
       <div class="why-card reveal"><div class="why-icon" style="background:#E2F0DE;color:var(--success);">🔒</div><h3 data-i18n="why.c6.t">Data Privacy</h3><p data-i18n="why.c6.d">Your data stays minimal and encrypted. Never shared with third parties.</p></div>
+    </div>
+  </section>
+
+  <!-- EMI CALCULATOR -->
+  <section class="section" id="emi">
+    <span class="label">EMI Calculator</span>
+    <h2 class="title"><span class="reveal-txt">Know your monthly instalment<br/>before you borrow</span></h2>
+    <p class="desc">Planning a business loan? Estimate your EMI, total interest and true cost — with a full month-by-month repayment schedule, right from your bank.</p>
+
+    <div class="emi-preview reveal">
+      <div class="emi-preview-card">
+        <div class="ep-inside">
+          <div class="ep-head">
+            <span class="ep-badge">🏦 Loan Calculator</span>
+            <span class="ep-feelive"><span class="live-dot"></span> Live</span>
+          </div>
+          <div class="ep-inputs">
+            <div class="ep-field">
+              <span class="ep-label">Loan amount</span>
+              <span class="ep-value" id="epP">₹1,00,000</span>
+              <input type="range" class="emi-range" id="epPSlider" min="10000" max="10000000" step="10000" value="100000" />
+            </div>
+            <div class="ep-field">
+              <span class="ep-label">Interest rate</span>
+              <span class="ep-value" id="epR">10.5%</span>
+              <input type="range" class="emi-range" id="epRSlider" min="1" max="30" step="0.1" value="10.5" />
+            </div>
+            <div class="ep-field">
+              <span class="ep-label">Tenure</span>
+              <span class="ep-value" id="epN">60 months</span>
+              <input type="range" class="emi-range" id="epNSlider" min="6" max="360" step="1" value="60" />
+            </div>
+          </div>
+          <div class="ep-result">
+            <div class="ep-result-inner">
+              <span class="ep-result-label">Monthly EMI</span>
+              <span class="ep-result-value" id="epEMI">₹2,149</span>
+            </div>
+            <div class="ep-bars">
+              <div class="ep-bar"><span class="ep-bar-label">Principal</span><div class="ep-bar-track"><div class="ep-bar-fill principal" id="epBarP"></div></div></div>
+              <div class="ep-bar"><span class="ep-bar-label">Interest</span><div class="ep-bar-track"><div class="ep-bar-fill interest" id="epBarI"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="emi-preview-copy">
+        <h3>Plan your loan EMI — in Hindi or English</h3>
+        <p>Drag the sliders to see your monthly instalment change instantly. Sahayak breaks down your repayment into <b>principal + interest</b>, estimates the <b>effective cost</b> after processing fees, and gives you a downloadable schedule to walk into the bank prepared.</p>
+        <ul class="ep-list">
+          <li>✅ Reducing-balance EMI (standard formula)</li>
+          <li>✅ Principal vs interest chart for the full tenure</li>
+          <li>✅ Processing-fee / effective-rate breakdown</li>
+          <li>✅ Month-by-month schedule + CSV export</li>
+        </ul>
+        <div class="cta-btns" style="margin-top:22px;">
+          <a href="emi.html" class="btn btn-accent">Open EMI Calculator →</a>
+          <a href="#how" class="btn btn-ghost" style="padding:12px 24px;font-size:14px;">Learn How It Works</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -535,6 +597,32 @@
       });
       document.getElementById('heroInput').placeholder = PH[lang];
     }
+
+    /* ═══════════ EMI PREVIEW (home hero widget) ═══════════ */
+    (function () {
+      const $pP = document.getElementById('epP'), $pR = document.getElementById('epR'), $pN = document.getElementById('epN');
+      const $pEMI = document.getElementById('epEMI');
+      const $pBarP = document.getElementById('epBarP'), $pBarI = document.getElementById('epBarI');
+      if (!$pEMI) return;
+      const fmtL = n => '₹' + Math.round(n).toLocaleString('en-IN');
+      function epCalc() {
+        const p = +document.getElementById('epPSlider').value;
+        const r = +document.getElementById('epRSlider').value / 12 / 100;
+        const n = +document.getElementById('epNSlider').value;
+        const emi = r === 0 ? (p / n) : p * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+        const interest = emi * n - p;
+        $pP.textContent = fmtL(p);
+        $pR.textContent = (+document.getElementById('epRSlider').value) + '%';
+        $pN.textContent = n + ' months';
+        $pEMI.textContent = fmtL(emi);
+        $pBarP.style.width = (100 * p / (p + interest)) + '%';
+        $pBarI.style.width = (100 * interest / (p + interest)) + '%';
+      }
+      ['epPSlider', 'epRSlider', 'epNSlider'].forEach(id => {
+        document.getElementById(id).addEventListener('input', epCalc);
+      });
+      epCalc();
+    })();
 
     /* ═══════════ PARTICLES BACKGROUND (moving canvas) ═══════════ */
     (function () {

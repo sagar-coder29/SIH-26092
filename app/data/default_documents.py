@@ -39,7 +39,14 @@ Key condition: The enterprise must be a "greenfield" project -- the applicant's 
 
 Implementing body: All scheduled commercial bank branches, monitored by SIDBI, under the Ministry of Finance / Department of Financial Services. Applications are made through the standupmitra.in portal or directly at a bank branch.
 
-Documents typically required: Identity/address proof, caste certificate (for SC/ST applicants), detailed project report, business registration (if any), bank account details.'''
+Documents typically required: Identity/address proof, caste certificate (for SC/ST applicants), detailed project report, business registration (if any), bank account details.
+
+OFFLINE ACCESS (Physical Locations):
+- All SBI, PNB, Bank of Baroda, Canara Bank, Union Bank, and other scheduled commercial bank branches across India
+- SIDBI Regional Offices (Delhi, Mumbai, Kolkata, Chennai, Bengaluru, Hyderabad, Ahmedabad, Lucknow)
+- District Industries Centres (DIC) in your district
+- Stand-Up Mitra Facilitation Centres at major bank branches
+- Toll-free helpline: 1800-180-1111'''
     },
     {
         'chunk_id': 'scheme_pmegp_v1',
@@ -63,7 +70,16 @@ Education requirement: For projects above Rs. 10 lakh, the applicant must have p
 
 Other conditions: Only one person per family (self + spouse) can avail PMEGP assistance. Entrepreneurship Development Programme (EDP) training is mandatory before subsidy is released for most project sizes (10 working days for projects above Rs. 5 lakh; 5 working days for Rs. 2-5 lakh; not mandatory below Rs. 2 lakh).
 
-Implementing body: Khadi and Village Industries Commission (KVIC), Ministry of MSME, along with State KVIBs and District Industries Centres (DICs). Apply via the PMEGP e-Portal.'''
+Implementing body: Khadi and Village Industries Commission (KVIC), Ministry of MSME, along with State KVIBs and District Industries Centres (DICs). Apply via the PMEGP e-Portal.
+
+OFFLINE ACCESS (Physical Locations):
+- KVIC Zonal Offices in all state capitals
+- District Industries Centres (DIC) -- available in every district
+- KVIB (Khadi & Village Industries Board) offices in your state
+- All nationalized banks: SBI, PNB, Bank of Baroda, Canara Bank, Union Bank, Indian Bank, Central Bank of India
+- Regional Rural Banks (RRBs) in rural areas
+- Udyam Kendra / MSME Facilitation Centres
+- Toll-free helpline: 1800-180-1551'''
     },
     {
         'chunk_id': 'scheme_mudra_pmmy_v1',
@@ -85,7 +101,15 @@ How it works: MUDRA itself does not lend directly -- loans are disbursed through
 
 Where to apply: Any participating bank branch, or online via the Udyamimitra / Jan Samarth portal.
 
-Note: Interest rates are NOT fixed by the government -- each lender sets its own rate (typically bank MCLR + spread), so quoted rates vary by bank.'''
+Note: Interest rates are NOT fixed by the government -- each lender sets its own rate (typically bank MCLR + spread), so quoted rates vary by bank.
+
+OFFLINE ACCESS (Physical Locations):
+- Any SBI, PNB, Bank of Baroda, Canara Bank, Union Bank, Indian Bank, Central Bank of India branch
+- Regional Rural Banks (RRBs) and Small Finance Banks
+- Cooperative banks and Nationalized bank branches in every town
+- MUDRA Loan Facilitation desks at lead bank branches
+- CGTMSE-empanelled Member Lending Institution branches
+- Toll-free helpline: 1800-233-4653'''
     },
     {
         'chunk_id': 'scheme_nsfdc_v1',
@@ -111,7 +135,16 @@ Scope: Covers a wide range of income-generating activities -- small manufacturin
 
 Implementing ministry: Ministry of Social Justice & Empowerment (MoSJE) -- the same sponsoring ministry as SIH problem statement SIH26092.
 
-Apply through: The relevant State SCDC office, an empanelled channel partner bank/NBFC-MFI listed on nsfdc.nic.in, or the PM-SURAJ portal.'''
+Apply through: The relevant State SCDC office, an empanelled channel partner bank/NBFC-MFI listed on nsfdc.nic.in, or the PM-SURAJ portal.
+
+OFFLINE ACCESS (Physical Locations):
+- State Scheduled Castes Development Corporations (SCDCs) offices in every state
+- NSFDC head office: North India Office, 14-A, Old Rajinder Nagar, New Delhi
+- PM-SURAJ facilitation counters at District Magistrate / District Social Welfare offices
+- Nationalized banks: SBI, PNB, Bank of India, Bank of Baroda, Canara Bank, Indian Bank
+- District Social Welfare Officer (DSWO) offices
+- Block-level SC Development offices in rural areas
+- Toll-free helpline: 011-42250160'''
     },
     {
         'chunk_id': 'scheme_asiiim_v1',
@@ -133,7 +166,15 @@ Launched: 30 September 2020 by Department of Social Justice and Empowerment, Min
 
 How it differs from loans: Instead of a standard repayable bank loan, ASIIM provides EQUITY funding tied to incubation and demonstratable progress -- it does not require repayment like a term loan.
 
-Apply through: The VCF-SC / ASIIM portal (vcfsc.in/asiim), via partner TBIs, or directly as per VCF-SC guidelines.'''
+Apply through: The VCF-SC / ASIIM portal (vcfsc.in/asiim), via partner TBIs, or directly as per VCF-SC guidelines.
+
+OFFLINE ACCESS (Physical Locations):
+- Partner Technology Business Incubators (TBIs) listed on vcfsc.in -- visit their office to apply
+- Atal Incubation Centres (AICs) in universities and engineering colleges near you
+- Science & Technology Parks and startup hubs across India
+- Department of Social Justice & Empowerment, New Delhi: Room 357-C, C-Wing, Shastri Bhawan
+- State-level Social Justice department offices
+- Contact via TBI program managers for walk-in applications'''
     },
     {
         'chunk_id': 'scheme_nai_roshni_v1',
@@ -149,7 +190,16 @@ What it provides: Free residential and non-residential leadership training modul
 
 How it differs from loans: Nai Roshni does NOT give a business loan or capital -- it is a training/skilling program. A woman who completes it might pair it with a financing scheme like MUDRA or PMEGP for actual business capital.
 
-Implementing body: Ministry of Minority Affairs, through NGOs, registered societies/public trusts/non-profit companies, universities, government training institutes, women's cooperatives, and state channelizing agencies. Applications through the Online Application Management System (OAMS).'''
+Implementing body: Ministry of Minority Affairs, through NGOs, registered societies/public trusts/non-profit companies, universities, government training institutes, women's cooperatives, and state channelizing agencies. Applications through the Online Application Management System (OAMS).
+
+OFFLINE ACCESS (Physical Locations):
+- Implementing NGOs and registered societies in your district (list on OAMS portal)
+- District Minority Welfare Offices
+- State Minority Development Corporations / Minorities Financlimited Offices
+- Women's Cooperative Societies and Mahila Mandals
+- Government Women's Training Institutes and ITIs
+- Village/Block-level training centres run by partner NGOs
+- Gram Panchayat offices for guidance on joining a batch'''
     },
     {
         'chunk_id': 'scheme_ddu_gky_v1',
@@ -167,7 +217,16 @@ Placement: Placement-linked -- implementing agencies must achieve a minimum 70% 
 
 How it differs from a business loan: DDU-GKY aims at getting a rural young person a JOB (wage-employment) through training; it is NOT a mechanism to finance an entrepreneur's own business capital, unlike MUDRA/PMEGP.
 
-Implementing body: Ministry of Rural Development (MoRD), a part of the National Rural Livelihoods Mission (NRLM), executed through approved Project Implementing Agencies (PIAs). Register via the Kaushal Panji / ddugky.gov.in portal or at a training centre through Gram Panchayat/BDO.'''
+Implementing body: Ministry of Rural Development (MoRD), a part of the National Rural Livelihoods Mission (NRLM), executed through approved Project Implementing Agencies (PIAs). Register via the Kaushal Panji / ddugky.gov.in portal or at a training centre through Gram Panchayat/BDO.
+
+OFFLINE ACCESS (Physical Locations):
+- Gram Panchayat offices and Block Development Offices (BDO) in every block
+- Project Implementing Agencies (PIAs) training centres in rural clusters
+- NRLM / DAY-NRLM Van (Village Level Organizations) offices
+- District Rural Development Agency (DRDA) / District Mission offices
+- RSETI (Rural Self Employment Training Institutes) centres
+- State Skill Development Missions and ITI training centres
+- Kaushal Panji facilitation counters at common service centres (CSC)'''
     },
     {
         'chunk_id': 'scheme_pm_svanidhi_v1',
@@ -183,7 +242,15 @@ Loan details: Revolving collateral-free loans in three tranches -- first tranche
 
 How it differs from larger schemes: This is for small working capital for street vendors specifically, with much lower amounts (thousands of rupees, not lakhs), unlike the 2 lakh-1 crore loans of MUDRA/Stand-Up India. There is a clear sector (street vending) and a required vending certificate.
 
-Implementing body: Ministry of Housing & Urban Affairs (MoHUA), disbursed through participating banks/SHGs.'''
+Implementing body: Ministry of Housing & Urban Affairs (MoHUA), disbursed through participating banks/SHGs.
+
+OFFLINE ACCESS (Physical Locations):
+- Urban Local Body (Municipal Corporation / Municipality / Nagar Panchayat) offices -- to obtain Certificate of Vending
+- Town Vending Committee (TVC) offices in your city
+- Participating banks: SBI, PNB, Bank of Baroda, Canara Bank, and all nationalized banks
+- Self-Help Groups (SHGs) and their federations
+- Street Vendor Facilitation Desks at municipal offices
+- PM SVANidhi camps organized by ULBs in vending zones'''
     },
     {
         'chunk_id': 'scheme_credit_guarantee_v1',
@@ -205,7 +272,15 @@ What is NOT covered: Educational institutions, agriculture, training institution
 
 How it fits with other schemes: CGTMSE is a guarantee behind loans; it is often used together with collateral-free lending programs (e.g., MUDRA, PMEGP loans can carry CGTMSE cover). It is not a standalone loan or subsidy for the applicant's capital -- the entrepreneur still takes a bank loan.
 
-Implementing body: Credit Guarantee Fund Trust for Micro and Small Enterprises, jointly promoted by the Ministry of Micro, Small and Medium Enterprises (MSME/Gol) and SIDBI. Borrower applies through a Member Lending Institution (bank/NBFC); the lender applies to CGTMSE for the guarantee.'''
+Implementing body: Credit Guarantee Fund Trust for Micro and Small Enterprises, jointly promoted by the Ministry of Micro, Small and Medium Enterprises (MSME/Gol) and SIDBI. Borrower applies through a Member Lending Institution (bank/NBFC); the lender applies to CGTMSE for the guarantee.
+
+OFFLINE ACCESS (Physical Locations):
+- All Member Lending Institution branches, including: SBI, PNB, Bank of Baroda, HDFC Bank, ICICI Bank, Axis Bank, Canara Bank, Union Bank
+- SIDBI Regional Offices across India (Delhi, Mumbai, Chennai, Kolkata, Ahmedabad, Hyderabad, Bengaluru)
+- Udyog Aadhaar / MSME Facilitation Centres (help register for free)
+- MSME Development Institutes (Ministry of MSME field offices) in state capitals
+- Government empanelled NBFC branches and Small Finance Banks
+- Toll-free MSME helpline: 1800-180-6666'''
     },
     {
         'chunk_id': 'scheme_pm_vishwakarma_v1',
@@ -227,6 +302,15 @@ Key terms (illustrative, verify current): 18 traditional trades; loan interest 5
 
 How it differs from PMEGP/MUDRA: It is trade-specific (18 traditional craft trades), the beneficiary is an artisan rather than any entrepreneur, and it bundles a toolkit benefit and skill stipend alongside credit, whereas PMEGP/MUDRA are general business financing.
 
-Implementing body: Ministry of Micro, Small and Medium Enterprises (MSME), in coordination with state/local partners'''
+Implementing body: Ministry of Micro, Small and Medium Enterprises (MSME), in coordination with state/local partners
+
+OFFLINE ACCESS (Physical Locations):
+- Any SBI, PNB, Bank of Baroda, Canara Bank, Union Bank, or other nationalized bank branch (loan disbursal)
+- PM Vishwakarma facilitation centres / counters at District Industries Centres (DIC)
+- Common Service Centres (CSC) in villages for offline registration assistance
+- MSME Development Institutes and Udyam Centres
+- Artisan co-operatives and KVIC offices
+- All 18 identified trade clusters (carpenters, tailors, blacksmiths, etc.) can ask at local Udyam Kendra
+- Toll-free helpline: 1800-180-6551'''
     },
 ]

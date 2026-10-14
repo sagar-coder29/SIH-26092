@@ -36,6 +36,7 @@
           </div>
           <div class="chat-input-bar">
             <textarea id="chatInput" rows="1" placeholder="मैं सिलाई का छोटा काम करता हूँ, 2 लाख चाहिए..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+            <button class="send-btn" id="voiceBtn" onclick="toggleVoice()" title="Voice input / बोलकर बताइए" style="background:transparent;color:var(--muted);font-size:20px;">🎤</button>
             <button class="send-btn" onclick="send()">➤</button>
           </div>
           <div style="padding:12px 16px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">

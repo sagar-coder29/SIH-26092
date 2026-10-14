@@ -16,10 +16,11 @@ from fastapi.responses import FileResponse, Response, JSONResponse
 
 from .core.config import get_settings
 from .core.database import db
-from .models.requests import SeedRequest, AnswerRequest, FetchSchemeRequest, GenerateRequest
+from .models.requests import SeedRequest, AnswerRequest, FetchSchemeRequest, GenerateRequest, EMIRequest
 from .models.responses import (
     SeedResponse, AnswerResponse, HealthResponse, ErrorResponse,
     QuestionsResponse, FetchSchemeResponse, SchemesResponse, ToolsResponse,
+    EMIResult,
 )
 from .services.rag import rag_service
 from .services.history import history_service
@@ -27,6 +28,7 @@ from .services.generate import generate_service
 from .services.questions import build_questions_payload
 from .services.govt_source import govt_source_service, list_official_sources
 from .services.tools import tools_as_json, gemini_function_declarations
+from .services.emi import calculate as calculate_emi
 from .data.default_documents import DEFAULT_DOCUMENTS
 
 # Configure logging
@@ -216,6 +218,7 @@ async def answer_question(request: AnswerRequest):
         response = AnswerResponse(
             text=result['text'],
             citations=result['citations'],
+            offline_access=result.get('offline_access') or [],
             profile_used=result.get('profile_used'),
             needs_prerequisites=result.get('needs_prerequisites', False),
             debug={
@@ -371,6 +374,36 @@ async def generate_session(request: GenerateRequest):
         raise HTTPException(status_code=500, detail=f"Failed to generate session: {str(e)}")
 
 
+@app.post("/api/emi", response_model=EMIResult, tags=["EMI Calculator"])
+async def emi_calculator(request: EMIRequest):
+    """
+    Compute an EMI (Equated Monthly Instalment) for a loan.
+
+    Standard reducing-balance formula with input validation. Returns the
+    monthly instalment, total interest, total payment, processing-fee-adjusted
+    effective cost, and a full month-by-month amortization schedule (so the
+    frontend can render the interest/principal graph without re-computing).
+
+    Example:
+        POST /api/emi {"principal": 500000, "annual_rate": 8.5, "tenure_months": 60}
+        → {"emi": 10256.62, "total_interest": 115397.2, "total_payment": 615397.2, "schedule": [...]}
+    """
+    try:
+        result = calculate_emi(
+            principal=request.principal,
+            annual_rate=request.annual_rate,
+            tenure_months=request.tenure_months,
+            processing_fee_percent=request.processing_fee_percent or 0.0,
+            include_schedule=request.include_schedule if request.include_schedule is not None else True,
+        )
+        return EMIResult(**result)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except Exception as e:
+        logger.error(f"EMI calculation failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to calculate EMI: {str(e)}")
+
+
 @app.get("/tools/gemini", tags=["AI Tools"])
 async def get_gemini_tools():
     """
@@ -397,6 +430,8 @@ _SITE_PAGES = {
     "scheme": "scheme.html",
     "documents": "documents.html",
     "documentation": "documentation.html",
+    "emi": "emi.html",
+    "emi-calculator": "emi.html",
 }
 
 

@@ -441,3 +441,36 @@ body.doc-page {
   .rc-name { flex-basis: 100%; }
   .rc-score { text-align: left; }
 }
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+  .bg-orbs,
+  .header,
+  .app-footer,
+  .action-row,
+  .btn,
+  .hero-input-wrap,
+  .mobile-nav,
+  #navToggle {
+    display: none !important;
+  }
+  .inner-shell {
+    padding-top: 0 !important;
+  }
+  .panel, .result-card, .scheme-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+  a {
+    text-decoration: none !important;
+    color: #000 !important;
+  }
+}
+

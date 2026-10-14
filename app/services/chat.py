@@ -15,7 +15,7 @@ and cites what is in the retrieved context.
 """
 
 import logging
-import time
+import asyncio
 from typing import List, Dict, Any, Optional
 import openai
 import anthropic
@@ -71,7 +71,15 @@ fit) the goal using the citations, and be honest when context is thin: "The docu
 X and Y, I can't speak to Z."
 8. Be concise but complete -- this is a decision-support tool for someone who needs to act, not a \
 policy essay. A good answer often has: a one-line direct response, a short per-scheme comparison \
-clearly attributed to sources, and next-step guidance (what to ask, where to check)."""
+clearly attributed to sources, and next-step guidance (what to ask, where to check).
+
+OFFLINE ACCESS (most important for low-digital-literacy users):
+9. If the retrieved context contains an "OFFLINE ACCESS (Physical Locations)" section, ALWAYS \
+tell the user the specific physical places they can go in person -- e.g. "SBI / PNB branch", \
+"District Industries Centre (DIC)", "KVIC office", "Block Development Office (BDO)" -- and any \
+toll-free helpline. Say plainly: "Aap isse online ya seedha <bank/office> se mil sakte hain" (in \
+the user's language). This is the offline / no-internet path. Never invent a physical location or \
+bank branch that is not in the context."""
 
 
 class ChatService:
@@ -171,7 +179,7 @@ class ChatService:
                         if transient and attempt < settings.gemini_max_retries - 1:
                             wait = (attempt + 1) * settings.gemini_retry_delay
                             logger.warning(f"{self.provider} transient error, retry {attempt+1} in {wait}s: {retry_err}")
-                            time.sleep(wait)
+                            await asyncio.sleep(wait)
                             continue
                         raise retry_err
 
@@ -209,7 +217,7 @@ class ChatService:
                         if transient and attempt < settings.gemini_max_retries - 1:
                             wait = (attempt + 1) * settings.gemini_retry_delay
                             logger.warning(f"Gemini transient error, retry {attempt+1} in {wait}s: {retry_err}")
-                            time.sleep(wait)
+                            await asyncio.sleep(wait)
                             continue
                         raise retry_err
 

@@ -181,10 +181,10 @@ class GenerateService:
                 # usually returns clean JSON).
                 if attempt < settings.gemini_max_retries - 1:
                     if transient:
-                        import time
+                        import asyncio as _asyncio
                         wait = (attempt + 1) * settings.gemini_retry_delay
                         logger.warning(f"generate: transient error, retry {attempt + 1} in {wait}s: {e}")
-                        time.sleep(wait)
+                        await _asyncio.sleep(wait)
                     else:
                         logger.warning(f"generate: unparseable output, retrying ({attempt + 1}): {raw[:1200]!r}")
                     continue

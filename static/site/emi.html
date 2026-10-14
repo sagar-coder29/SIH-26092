@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahayak — EMI Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <style>
+    .emi-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 800px) {
+      .emi-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .preset-btns {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    .preset-btns button {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .result-item {
+      background: var(--bg);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .result-item h4 {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .result-item .val {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .result-item.highlight {
+      background: var(--primary-light);
+      color: var(--surface);
+      border-color: var(--primary);
+    }
+    .result-item.highlight h4, .result-item.highlight .val {
+      color: var(--surface);
+    }
+    .bar-chart {
+      height: 24px;
+      width: 100%;
+      background: #eee;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      margin-top: 0.5rem;
+    }
+    .bar-principal { background: var(--primary); height: 100%; transition: width 0.5s ease-in-out; }
+    .bar-interest { background: var(--accent); height: 100%; transition: width 0.5s ease-in-out; }
+    .chart-legend {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.25rem; }
+    .legend-color { width: 12px; height: 12px; border-radius: 2px; }
+    .legend-color.principal { background: var(--primary); }
+    .legend-color.interest { background: var(--accent); }
+    
+    .schedule-table-wrap {
+      margin-top: 2rem;
+      overflow-x: auto;
+    }
+    table.schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.schedule-table th, table.schedule-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+    }
+    table.schedule-table th {
+      background: var(--bg);
+      font-weight: 600;
+      color: var(--heading);
+      white-space: nowrap;
+    }
+    table.schedule-table th:first-child, table.schedule-table td:first-child {
+      text-align: left;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--heading);
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font);
+      background: var(--surface);
+    }
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+    }
+    .error-msg {
+      color: #d32f2f;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+  </style>
+</head>
+<body class="emi-page">
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+  <header class="header" id="pageHeader"></header>
+  
+  <div class="inner-shell">
+    <div class="page-wrap reveal">
+      <div class="page-head">
+        <h1 class="page-title">EMI Calculator (ईएमआई कैलकुलेटर)</h1>
+        <p class="page-desc">Calculate your monthly loan payments and view the amortization schedule. (अपने मासिक ऋण भुगतान की गणना करें और परिशोधन अनुसूची देखें।)</p>
+      </div>
+      
+      <div class="emi-container">
+        <div class="panel">
+          <h3>Loan Details (ऋण विवरण)</h3>
+          <form id="emiForm" onsubmit="event.preventDefault(); calculateEMI();" style="margin-top: 1rem;">
+            <div class="form-group">
+              <label>Loan Amount / ऋण राशि (₹)</label>
+              <input type="number" id="principal" required min="1000" step="any" placeholder="e.g. 500000" />
+            </div>
+            
+            <div class="form-group">
+              <label>Annual Interest Rate / वार्षिक ब्याज दर (%)</label>
+              <input type="number" id="rate" required min="0" step="0.01" placeholder="e.g. 8.5" />
+              <div class="preset-btns">
+                <button type="button" class="btn btn-sm btn-outline" onclick="setRate(11.25)">PMEGP (11.25%)</button>
+                <button type="button" class="btn btn-sm btn-outline" onclick="setRate(6.0)">NSFDC (6%)</button>
+                <button type="button" class="btn btn-sm btn-outline" onclick="setRate(7.0)">PM SVANidhi (7%)</button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Tenure / अवधि (Months / महीने)</label>
+              <input type="number" id="tenure" required min="1" step="1" placeholder="e.g. 60" />
+            </div>
+            
+            <div class="form-group">
+              <label>Processing Fee / प्रसंस्करण शुल्क (%)</label>
+              <input type="number" id="fee" required min="0" step="0.01" value="1.0" />
+            </div>
+            
+            <div id="errorMsg" class="error-msg">Please fill all fields correctly.</div>
+            
+            <div class="btn-group" style="margin-top: 2rem;">
+              <button type="submit" class="btn btn-accent" id="calcBtn">Calculate (गणना करें)</button>
+              <button type="button" class="btn btn-ghost" onclick="resetForm()">Reset (रीसेट)</button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="panel" id="resultsPanel" style="display: none;">
+          <h3>Results (परिणाम)</h3>
+          
+          <div class="result-grid" style="margin-top: 1rem;">
+            <div class="result-item highlight">
+              <h4>Monthly EMI (मासिक ईएमआई)</h4>
+              <div class="val" id="resEmi">₹0</div>
+            </div>
+            <div class="result-item">
+              <h4>Total Interest (कुल ब्याज)</h4>
+              <div class="val" id="resInterest">₹0</div>
+            </div>
+            <div class="result-item">
+              <h4>Total Payment (कुल भुगतान)</h4>
+              <div class="val" id="resTotal">₹0</div>
+            </div>
+            <div class="result-item">
+              <h4>Net Disbursal (शुद्ध संवितरण)</h4>
+              <div class="val" id="resDisbursal">₹0</div>
+              <div style="font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem;">Processing Fee: <span id="resFee" style="font-weight: 600;">₹0</span></div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+            <h4 style="color: var(--heading); font-size: 1rem;">Effective Annual Rate (प्रभावी वार्षिक दर): <span id="resEffective" style="color: var(--primary); font-weight: 700;">0%</span></h4>
+          </div>
+          
+          <div style="margin-top: 1.5rem;">
+            <h4 style="margin-bottom: 0.5rem; color: var(--heading);">Amount Breakdown (राशि का विवरण)</h4>
+            <div class="bar-chart" id="barChart">
+              <div class="bar-principal" id="barPrincipal" style="width: 50%;"></div>
+              <div class="bar-interest" id="barInterest" style="width: 50%;"></div>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div class="legend-color principal"></div>
+                <span>Principal (मूलधन)</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color interest"></div>
+                <span>Interest (ब्याज)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel schedule-table-wrap" id="schedulePanel" style="display: none;">
+        <h3>Amortization Schedule (परिशोधन अनुसूची)</h3>
+        <table class="schedule-table" style="margin-top: 1rem;">
+          <thead>
+            <tr>
+              <th>Month (महीना)</th>
+              <th>EMI (ईएमआई)</th>
+              <th>Principal (मूलधन)</th>
+              <th>Interest (ब्याज)</th>
+              <th>Balance (शेष राशि)</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody">
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+  </div>
+
+  <footer class="app-footer" id="pageFooter"></footer>
+  <script src="site-config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    buildHeader('EMI Calculator');
+    buildFooter();
+    initMobileMenu();
+    if(typeof initReveal === 'function') initReveal();
+
+    function setRate(rate) {
+      document.getElementById('rate').value = rate;
+    }
+    
+    function resetForm() {
+      document.getElementById('emiForm').reset();
+      document.getElementById('resultsPanel').style.display = 'none';
+      document.getElementById('schedulePanel').style.display = 'none';
+      document.getElementById('errorMsg').style.display = 'none';
+    }
+    
+    const formatCurrency = (val) => {
+      return new Intl.NumberFormat('en-IN', { 
+        style: 'currency', 
+        currency: 'INR', 
+        maximumFractionDigits: 0 
+      }).format(val);
+    };
+    
+    async function calculateEMI() {
+      const principal = parseFloat(document.getElementById('principal').value);
+      const rate = parseFloat(document.getElementById('rate').value);
+      const tenure = parseInt(document.getElementById('tenure').value);
+      const fee = parseFloat(document.getElementById('fee').value || 0);
+      
+      if(isNaN(principal) || isNaN(rate) || isNaN(tenure)) {
+        document.getElementById('errorMsg').style.display = 'block';
+        return;
+      }
+      document.getElementById('errorMsg').style.display = 'none';
+      
+      const btn = document.getElementById('calcBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Calculating...';
+      btn.disabled = true;
+      
+      try {
+        const payload = {
+          principal: principal,
+          annual_rate: rate,
+          tenure_months: tenure,
+          processing_fee_percent: fee,
+          include_schedule: true
+        };
+        
+        const response = await fetch('/api/emi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+          throw new Error('API Error');
+        }
+        
+        const data = await response.json();
+        
+        // Populate results
+        document.getElementById('resEmi').textContent = formatCurrency(data.emi);
+        document.getElementById('resInterest').textContent = formatCurrency(data.total_interest);
+        document.getElementById('resTotal').textContent = formatCurrency(data.total_payment);
+        document.getElementById('resDisbursal').textContent = formatCurrency(data.net_disbursal);
+        document.getElementById('resFee').textContent = formatCurrency(data.processing_fee);
+        document.getElementById('resEffective').textContent = data.effective_annual_rate.toFixed(2) + '%';
+        
+        // Update Breakdown Chart
+        const principalPct = (data.principal / data.total_payment) * 100;
+        const interestPct = (data.total_interest / data.total_payment) * 100;
+        document.getElementById('barPrincipal').style.width = principalPct + '%';
+        document.getElementById('barInterest').style.width = interestPct + '%';
+        
+        // Build Schedule Table
+        const tbody = document.getElementById('scheduleBody');
+        tbody.innerHTML = '';
+        data.schedule.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${row.month}</td>
+            <td>${formatCurrency(row.emi)}</td>
+            <td>${formatCurrency(row.principal)}</td>
+            <td>${formatCurrency(row.interest)}</td>
+            <td>${formatCurrency(row.balance)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+        
+        document.getElementById('resultsPanel').style.display = 'block';
+        document.getElementById('schedulePanel').style.display = 'block';
+        
+        // Scroll to results on mobile
+        if(window.innerWidth < 800) {
+          document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+      } catch (err) {
+        console.error(err);
+        document.getElementById('errorMsg').textContent = 'Failed to calculate EMI. Please check the network or API.';
+        document.getElementById('errorMsg').style.display = 'block';
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -42,7 +42,7 @@ class Settings(BaseSettings):
 
     # Groq Configuration (OpenAI-compatible endpoint)
     groq_api_key: str = Field(default="", env="GROQ_API_KEY")
-    groq_chat_model: str = Field(default="llama-3.3-70b-versatile", env="GROQ_CHAT_MODEL")
+    groq_chat_model: str = Field(default="openai/gpt-oss-20b", env="GROQ_CHAT_MODEL")
     groq_base_url: str = Field(default="https://api.groq.com/openai/v1", env="GROQ_BASE_URL")
 
     # Anthropic Configuration

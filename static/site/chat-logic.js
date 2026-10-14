@@ -205,6 +205,16 @@
       lastAnswer = data.text || '';
       if (data.citations && data.citations.length) recordCited(data.citations);
 
+      // Offline access points (physical bank branches / govt offices) card
+      if (data.offline_access && data.offline_access.length) {
+        const locs = data.offline_access.slice(0, 8).map(l => esc(l)).join('<br>');
+        html += '<div style="margin-top:12px;padding:12px;border-radius:12px;background:#EEF7F2;border:1px solid #BFE3D3;font-size:13px;">' +
+          '<div style="font-weight:700;margin-bottom:6px;color:#0B6E4F;">🏦 कहाँ जाएँ — Offline Access (No Internet)</div>' +
+          '<div style="line-height:1.6;">' + locs + '</div>' +
+          '<div style="margin-top:6px;font-size:12px;color:var(--muted);">' +
+          'ये असली ब्रांच / दफ्तर हैं जहाँ आप बिना इंटरनेट के आवेदन कर सकते हैं। हेल्पलाइन नंबर भी दिया गया है।</div></div>';
+      }
+
       // needs_prerequisites flag
       if (data.needs_prerequisites) {
         html += suggestFollowUp(window.Sahayak.getProfile());
@@ -348,16 +358,79 @@
     ask(v);
   }
 
+
+  // ───────── Voice input (Web Speech API) ─────────
+  let recognition = null;
+  let isListening = false;
+
+  function toggleVoice() {
+    const btn = document.getElementById('voiceBtn');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Voice input is not supported in this browser. Please use Chrome or Edge.\n\nइस ब्राउज़र में वॉइस इनपुट उपलब्ध नहीं है। कृपया Chrome या Edge इस्तेमाल करें।');
+      return;
+    }
+    if (isListening && recognition) {
+      recognition.stop();
+      return;
+    }
+    recognition = new SpeechRecognition();
+    recognition.lang = 'hi-IN';       // Primary: Hindi
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      isListening = true;
+      if (btn) { btn.style.color = 'var(--error)'; btn.textContent = '⏹'; }
+      input.placeholder = 'बोलिए… / Speak now…';
+    };
+    recognition.onresult = (event) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      input.value = transcript;
+    };
+    recognition.onend = () => {
+      isListening = false;
+      if (btn) { btn.style.color = 'var(--muted)'; btn.textContent = '🎤'; }
+      input.placeholder = 'मैं सिलाई का छोटा काम करता हूँ, 2 लाख चाहिए...';
+      // Auto-send if we got text
+      if (input.value.trim()) send();
+    };
+    recognition.onerror = (event) => {
+      isListening = false;
+      if (btn) { btn.style.color = 'var(--muted)'; btn.textContent = '🎤'; }
+      if (event.error === 'no-speech') {
+        input.placeholder = 'कुछ सुनाई नहीं दिया — दोबारा कोशिश करें';
+      } else {
+        console.warn('Speech recognition error:', event.error);
+      }
+    };
+    recognition.start();
+  }
+
   // expose to inline onclick handlers
   window.send = send;
   window.runDemo = runDemo;
   window.finishSession = finish;
   window.updateProfile = updateProfileField;
   window.clearChat = clearChat;
+  window.toggleVoice = toggleVoice;
 
   // init on load
   document.addEventListener('DOMContentLoaded', () => {
     refreshProfile();
     window.Sahayak.initSession().then(() => refreshProfile());
+
+    // If the user typed something in the hero search bar on the landing page,
+    // pick it up from the URL param and auto-send it.
+    const params = new URLSearchParams(window.location.search);
+    const heroQuery = params.get('q');
+    if (heroQuery && heroQuery.trim()) {
+      input.value = heroQuery.trim();
+      setTimeout(() => send(), 400);
+    }
   });
 })();

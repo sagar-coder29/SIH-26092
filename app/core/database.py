@@ -173,16 +173,11 @@ class Database:
                 logger.info(f"Vector search returned {len(result.data)} results")
                 return result.data
             else:
-                # Fallback: if RPC function returns empty, try regular query
-                logger.info("Vector search returned no results, using fallback query")
-                result = client.table('rag_chunks').select('*').limit(top_k).execute()
-
-                # Add mock similarity scores for fallback
-                if result.data:
-                    for i, chunk in enumerate(result.data):
-                        chunk['similarity'] = 1.0 - (i * 0.1)
-
-                return result.data or []
+                # No matching schemes found — return empty instead of fabricating
+                # results with fake similarity scores (which would violate the
+                # "Never Hallucinate Schemes" design principle).
+                logger.warning("Vector search returned no results for query")
+                return []
 
         except Exception as e:
             logger.error(f"Vector search failed: {e}")

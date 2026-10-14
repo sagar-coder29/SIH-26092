@@ -130,6 +130,7 @@ class RAGService:
             result = {
                 'text': answer_text,
                 'citations': citations,
+                'offline_access': self._extract_offline_access(context_blocks),
                 'profile_used': profile,
                 'needs_prerequisites': needs_prereq,
                 'debug': {
@@ -270,6 +271,39 @@ class RAGService:
             return list(dict.fromkeys(ordered_blocks))
 
         return resolved
+
+    def _extract_offline_access(self, context_blocks: List[Dict[str, Any]]) -> List[str]:
+        """
+        Extract the "OFFLINE ACCESS (Physical Locations)" section from retrieved
+        context chunks so the frontend can render a dedicated 'Where to go in
+        person' card even before the full answer is generated.
+
+        Each scheme document carries an OFFLINE ACCESS block listing the
+        physical bank branches / government offices where the scheme can be
+        availed in-person (no internet required).
+        """
+        offline_lines = []
+        seen = set()
+        for block in context_blocks:
+            text = block.get('text', '')
+            # Find the OFFLINE ACCESS block within the chunk text
+            start = text.upper().find('OFFLINE ACCESS')
+            if start == -1:
+                continue
+            section = text[start:]
+            # Section ends at the next blank line or end of text
+            end = section.find('\n\n')
+            body = section if end == -1 else section[:end]
+            for line in body.splitlines():
+                line = line.strip()
+                if not line or 'OFFLINE ACCESS' in line.upper():
+                    continue
+                # De-duplicate identical lines across chunks
+                key = line.lower()
+                if key not in seen:
+                    seen.add(key)
+                    offline_lines.append(line)
+        return offline_lines
 
 
 # Global RAG service instance

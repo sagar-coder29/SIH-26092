@@ -161,7 +161,8 @@ const NAV_I18N = {
   'Chat': {hi:'चैट', en:'Chat'},
   'Results': {hi:'परिणाम', en:'Results'},
   'Dashboard': {hi:'डैशबोर्ड', en:'Dashboard'},
-  'Documents': {hi:'दस्तावेज़', en:'Documents'}
+  'Documents': {hi:'दस्तावेज़', en:'Documents'},
+  'EMI Calculator': {hi:'EMI कैलकुलेटर', en:'EMI Calculator'}
 };
 
 /* ───────── Language ───────── */
@@ -189,7 +190,8 @@ function buildHeader(activePage) {
   // the background for admins.
   const navItems = [
     ['Home', 'index.html', 'Home'],
-    ['Chat', 'chat.html', 'Chat']
+    ['Chat', 'chat.html', 'Chat'],
+    ['EMI Calculator', 'emi.html', 'EMI Calculator']
   ];
   if (hasGeneratedSession()) navItems.push(['Results', 'results.html', 'Results']);
   if (hasGeneratedSession()) navItems.push(['Dashboard', 'dashboard.html', 'Dashboard']);
@@ -210,6 +212,7 @@ function buildHeader(activePage) {
         <button class="lang-btn active" onclick="setLangGlobal('hi')">हिन्दी</button>
         <button class="lang-btn" onclick="setLangGlobal('en')">EN</button>
       </div>
+      <a href="emi.html" class="btn btn-accent emi-nav-btn" aria-label="EMI Calculator">🏦 EMI</a>
       <a href="login.html" class="btn btn-accent" style="padding:9px 22px;font-size:13px;" id="headerAuth">Start</a>
       <button class="mobile-menu-btn" id="mobileBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
@@ -237,7 +240,7 @@ function buildFooter() {
       <div class="logo-text" style="margin-bottom:8px;">Sahayak</div>
       <div style="display:flex;gap:24px;flex-wrap:wrap;">
         <a href="chat.html">Chat</a><a href="results.html">Results</a>
-        <a href="dashboard.html">Dashboard</a>
+        <a href="dashboard.html">Dashboard</a><a href="emi.html">EMI Calculator</a>
       </div>
       <span>© 2026 Sahayak · MoSJE</span>
     </div>

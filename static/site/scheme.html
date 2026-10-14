@@ -33,6 +33,7 @@
           <a href="#eligibility">Your Eligibility</a>
           <a href="#documents">Documents</a>
           <a href="#howto">How to Apply</a>
+          <a href="#offline">Offline Access</a>
           <a href="#why">Why This Scheme</a>
           <a href="#related">Related Schemes</a>
         </nav>
@@ -64,6 +65,14 @@
           <section class="detail-section panel" id="howto">
             <h2>🛠️ How to Apply</h2>
             <ol class="how-list" id="howList"></ol>
+          </section>
+
+          <!-- OFFLINE ACCESS -->
+          <section class="detail-section panel" id="offline" style="background:linear-gradient(160deg,#EEF7F2,#E3F3EB);">
+            <h2>🏦 Offline Access — Where to Go In Person</h2>
+            <p style="color:var(--muted);margin-top:-6px;">Aap isse binä internet ke apne paas ke <b>asli bank branch ya sarkari office</b> se mil sakte hain. No computer / no net needed.</p>
+            <div class="elg-list" id="offlineList" style="list-style:none;display:grid;gap:10px;margin-top:14px;"></div>
+            <div style="margin-top:16px;font-size:13px;color:var(--muted);">💡 सबसे नज़दीकी शाखा जानने के लिए हेल्पलाइन नंबर पर फ़ोन करें, या गाँव के <b>Common Service Centre (CSC)</b> / <b>Block Office</b> / <b>Bank Mitra</b> से पूछें।</div>
           </section>
 
           <!-- WHY -->
@@ -187,6 +196,21 @@
       document.getElementById('schWhy').textContent =
         (why ? why.head + ': ' + why.body : excerptFor(text)) || 'See the official document for details.';
       document.getElementById('schSource').textContent = s.portal;
+
+      // Offline Access: extract the OFFLINE ACCESS block from the document text
+      // so users see the real physical bank branches / govt offices (in-person).
+      const offText = text.split(/\n\s*\n/).find(p => /OFFLINE ACCESS/i.test(p)) || '';
+      const offLines = offText.split('\n').map(l => l.trim()).filter(l =>
+        l && !/OFFLINE ACCESS/i.test(l) && !/^[-•*]/i.test(l) || (/^[-•*]/.test(l) && l.length > 15));
+      const offListEl = document.getElementById('offlineList');
+      if (offLines.length) {
+        offListEl.innerHTML = offLines.map(l =>
+          `<div style="background:#fff;border:1px solid #BFE3D3;border-radius:10px;padding:10px 14px;display:flex;gap:8px;align-items:flex-start;">
+             <span>📍</span><span>${escHtml(l.replace(/^[-•*]\s*/, ''))}</span>
+           </div>`).join('');
+      } else {
+        offListEl.innerHTML = '<div style="color:var(--muted)">Offline access details not indexed for this scheme yet. Call the official helpline or visit the nearest CSC / bank branch.</div>';
+      }
 
       // Related schemes: the rest of the catalog.
       const others = Object.keys(meta).filter(k => k !== base);

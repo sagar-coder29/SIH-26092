@@ -28,6 +28,9 @@ class AnswerResponse(BaseModel):
     text: str = Field(..., description="Generated answer with inline citations")
     citations: List[str] = Field(..., description="List of chunk IDs used as sources",
                                  examples=[["scheme_pmegp_v1#1"]])
+    offline_access: Optional[List[str]] = Field(
+        None, description="Physical bank branches and government offices where the "
+                          "scheme can be availed in person (offline access points)")
     debug: DebugInfo = Field(..., description="Debug information")
     profile_used: Optional[Dict[str, Any]] = Field(
         None, description="The prerequisite profile that was used (if provided)")
@@ -83,6 +86,23 @@ class HealthResponse(BaseModel):
     """Response model for the /healthz endpoint."""
     status: str = Field(..., description="Health status", examples=["ok"])
     database_connected: bool = Field(..., description="Database connection status", examples=[True])
+
+
+class EMIResult(BaseModel):
+    """Response model for the /api/emi endpoint (EMI calculator)."""
+    principal: float = Field(..., description="Loan amount in INR", examples=[500000])
+    annual_rate: float = Field(..., description="Annual interest rate in percent", examples=[8.5])
+    tenure_months: int = Field(..., description="Loan tenure in months", examples=[60])
+    monthly_rate: float = Field(..., description="Monthly interest rate in percent", examples=[0.7083])
+    emi: float = Field(..., description="Monthly instalment in INR", examples=[10256.62])
+    total_interest: float = Field(..., description="Total interest paid over the loan", examples=[115397.2])
+    total_payment: float = Field(..., description="Total paid (principal + interest)", examples=[615397.2])
+    processing_fee_percent: float = Field(0.0, description="Processing fee as percent of principal")
+    processing_fee: float = Field(0.0, description="Processing fee amount in INR", examples=[5000])
+    net_disbursal: float = Field(..., description="Principal minus processing fee", examples=[495000])
+    effective_annual_rate: float = Field(..., description="Approx effective APR on net disbursal", examples=[8.68])
+    schedule: Optional[List[Dict[str, Any]]] = Field(
+        None, description="Month-by-month amortization schedule (month, emi, interest, principal, balance)")
 
 
 class ErrorResponse(BaseModel):

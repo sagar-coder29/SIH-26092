@@ -103,10 +103,12 @@ class GovtSourceService:
 
     async def fetch_text(self, url: str, timeout: int = 30) -> str:
         """Fetch and extract readable text from a govt portal URL."""
+        import asyncio
         # Many official .gov.in / scheme portals serve incomplete TLS chains, so
         # retry without strict verification when the verified request fails.
         try:
-            resp = requests.get(
+            resp = await asyncio.to_thread(
+                requests.get,
                 url,
                 headers={"User-Agent": USER_AGENT},
                 timeout=timeout,
@@ -116,7 +118,8 @@ class GovtSourceService:
             logger.warning(f"SSL verification failed for {url}; retrying with verification disabled")
             import urllib3
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            resp = requests.get(
+            resp = await asyncio.to_thread(
+                requests.get,
                 url,
                 headers={"User-Agent": USER_AGENT},
                 timeout=timeout,

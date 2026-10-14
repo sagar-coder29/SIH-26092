@@ -103,3 +103,39 @@ class GenerateRequest(BaseModel):
     user_id: Optional[str] = Field(None, description="Supabase auth user id.")
     user_email: Optional[str] = Field(None, description="Email of the logged-in user.")
     full_name: Optional[str] = Field(None, description="User's display name.")
+
+
+class EMIRequest(BaseModel):
+    """Request model for the /api/emi endpoint (EMI calculator)."""
+    principal: float = Field(
+        ...,
+        gt=0,
+        le=1_000_000_000,
+        description="Loan amount in INR (must be > 0).",
+        examples=[500000],
+    )
+    annual_rate: float = Field(
+        ...,
+        ge=0,
+        le=100,
+        description="Annual interest rate in percent.",
+        examples=[8.5],
+    )
+    tenure_months: int = Field(
+        ...,
+        ge=1,
+        le=480,
+        description="Loan tenure in months (max 40 years).",
+        examples=[60],
+    )
+    processing_fee_percent: Optional[float] = Field(
+        0.0,
+        ge=0,
+        le=10,
+        description="One-time processing fee as a percent of the principal.",
+        examples=[1.0],
+    )
+    include_schedule: Optional[bool] = Field(
+        True,
+        description="Whether to include the month-by-month amortization schedule.",
+    )
